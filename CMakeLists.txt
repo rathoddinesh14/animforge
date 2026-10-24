@@ -50,7 +50,7 @@ if(AGA_USE_OPENGL)
     if(OpenGL_FOUND)
         target_link_libraries(aga_core PUBLIC OpenGL::GL)
     endif()
-    target_compile_definitions(aga_core PUBLIC AGA_USE_OPENGL=1)
+    target_compile_definitions(aga_core PUBLIC AGA_USE_OPENGL=1 GLFW_INCLUDE_NONE=1)
     target_include_directories(aga_core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 endif()
 
