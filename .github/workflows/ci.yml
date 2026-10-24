@@ -11,12 +11,6 @@ concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  # Full SHA required by lukka/run-vcpkg (tag 2024.11.16)
-  VCPKG_COMMIT: b2cb0da531c2f1f740045bfe7c4dac59f0b2b69c
-  # Disable GHA binary cache source (avoids ACTIONS_RUNTIME_TOKEN requirement)
-  VCPKG_BINARY_SOURCES: "clear;default,readwrite"
-
 jobs:
   windows-build-test:
     name: Windows Build & Test
@@ -26,19 +20,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@v11
-        with:
-          vcpkgDirectory: ${{ github.workspace }}/external/vcpkg
-          vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
-          vcpkgJsonGlob: vcpkg.json
-
-      - name: Configure (CMake + vcpkg)
+      - name: Configure
         run: |
           cmake -S . -B build `
             -G "Visual Studio 17 2022" -A x64 `
-            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/external/vcpkg/scripts/buildsystems/vcpkg.cmake `
-            -DVCPKG_TARGET_TRIPLET=x64-windows `
             -DAGA_BUILD_TESTS=ON `
             -DAGA_BUILD_SAMPLES=OFF
 
@@ -48,6 +33,33 @@ jobs:
       - name: Test
         run: ctest --test-dir build -C Release --output-on-failure --parallel 4
 
+  linux-build-test:
+    name: Linux Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build g++
+
+      - name: Configure
+        run: |
+          cmake -S . -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DAGA_BUILD_TESTS=ON \
+            -DAGA_BUILD_SAMPLES=OFF
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure --parallel 4
+
   format-check:
     name: clang-format
     runs-on: ubuntu-latest
@@ -56,17 +68,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run clang-format
-        uses: jidicula/clang-format-action@v4.14.0
-        with:
-          clang-format-version: "17"
-          check-path: "."
-          fallback-style: "file"
-          exclude-regex: "build|external|_deps|third_party|vcpkg_installed"
+      - name: Install clang-format
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format-17
+
+      - name: Check formatting
+        run: |
+          set -e
+          files=$(git ls-files '*.cpp' '*.hpp' '*.h' '*.cc' '*.cxx' || true)
+          if [ -z "$files" ]; then
+            echo "No C/C++ files to check"
+            exit 0
+          fi
+          echo "$files" | xargs clang-format-17 --dry-run --Werror
+          echo "clang-format: OK"
 
   clang-tidy:
     name: clang-tidy
     runs-on: ubuntu-latest
+    needs: [linux-build-test]
 
     steps:
       - name: Checkout
@@ -75,35 +96,22 @@ jobs:
       - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang-tidy-17 cmake ninja-build
+          sudo apt-get install -y clang-tidy-17 cmake ninja-build g++
 
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@v11
-        with:
-          vcpkgDirectory: ${{ github.workspace }}/external/vcpkg
-          vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
-          vcpkgJsonGlob: vcpkg.json
-
-      - name: Configure with compile_commands
+      - name: Configure
         run: |
           cmake -S . -B build-tidy \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/external/vcpkg/scripts/buildsystems/vcpkg.cmake \
-            -DVCPKG_TARGET_TRIPLET=x64-linux \
             -DAGA_BUILD_TESTS=ON \
             -DAGA_BUILD_SAMPLES=OFF
 
-      - name: Build (generate artifacts for tidy)
+      - name: Build
         run: cmake --build build-tidy --parallel
 
       - name: Run clang-tidy
         run: |
-          if [ ! -f build-tidy/compile_commands.json ]; then
-            echo "compile_commands.json missing" >&2
-            exit 1
-          fi
           clang-tidy-17 -p build-tidy \
             tests/math/test_glm_integration.cpp \
             src/math/math_dummy.cpp \

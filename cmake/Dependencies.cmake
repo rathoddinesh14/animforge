@@ -1,10 +1,44 @@
-# Dependencies resolved via vcpkg toolchain.
-# This file centralises find_package calls so the root CMakeLists stays clean.
+# Resolve dependencies: prefer packages already on the system / vcpkg toolchain,
+# otherwise fetch via FetchContent (used by CI on the free tier).
 
-find_package(glm CONFIG REQUIRED)
-find_package(Catch2 3 CONFIG REQUIRED)
+include(FetchContent)
 
-# Optional later
-# find_package(glfw3 CONFIG REQUIRED)
-# find_package(glad CONFIG REQUIRED)
-# find_package(Vulkan REQUIRED)
+# ---------------------------------------------------------------------------
+# GLM
+# ---------------------------------------------------------------------------
+find_package(glm CONFIG QUIET)
+if(NOT glm_FOUND)
+    message(STATUS "glm not found via find_package – fetching with FetchContent")
+    FetchContent_Declare(
+        glm
+        GIT_REPOSITORY https://github.com/g-truc/glm.git
+        GIT_TAG        1.0.1
+        GIT_SHALLOW    TRUE
+    )
+    set(GLM_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLM_BUILD_INSTALL OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(glm)
+    if(NOT TARGET glm::glm)
+        add_library(glm::glm ALIAS glm)
+    endif()
+endif()
+
+# ---------------------------------------------------------------------------
+# Catch2 (only when tests are enabled)
+# ---------------------------------------------------------------------------
+if(AGA_BUILD_TESTS)
+    find_package(Catch2 3 CONFIG QUIET)
+    if(NOT Catch2_FOUND)
+        message(STATUS "Catch2 not found via find_package – fetching with FetchContent")
+        FetchContent_Declare(
+            Catch2
+            GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+            GIT_TAG        v3.7.1
+            GIT_SHALLOW    TRUE
+        )
+        set(CATCH_INSTALL_DOCS OFF CACHE BOOL "" FORCE)
+        set(CATCH_INSTALL_EXTRAS OFF CACHE BOOL "" FORCE)
+        FetchContent_MakeAvailable(Catch2)
+        list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
+    endif()
+endif()
