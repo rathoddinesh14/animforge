@@ -4,9 +4,10 @@ Use GitHub Issues with labels: `phase-0`, `phase-1`, `phase-2`, … and `math`, 
 
 ## Phase 0 – Foundation (Current)
 - [x] Repository structure & documentation
+- [x] Testing strategy decided: Catch2 v3 + mandatory TDD
 - [ ] CMake + vcpkg skeleton builds on Windows
 - [ ] Basic logging & assertion macros
-- [ ] Math library (Vec3, Quat, Mat4, Transform) + unit tests
+- [ ] Math library (Vec3, Quat, Mat4, Transform) driven by TDD + Catch2
 - [ ] MATH_CONVENTIONS.md finalized and enforced
 
 ## Phase 1 – Single Skeleton + Linear Blend Skinning

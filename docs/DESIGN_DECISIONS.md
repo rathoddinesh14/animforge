@@ -45,9 +45,25 @@ GLM remains available for rapid prototyping and comparison.
 **Choice**: Windows (MSVC) first. Linux and macOS are secondary goals.  
 **Rationale**: User’s current primary environment. Clean platform abstraction keeps future ports low-cost.
 
-## 10. Testing Philosophy
-**Choice**: Unit tests for math, pose evaluation, and blending. Visual regression via the sample viewer.  
-**Rationale**: Numerical correctness of interpolation and hierarchical transforms is critical. Visual inspection catches skinning and IK artifacts that unit tests miss.
+## 10. Testing Framework & Philosophy
+**Choice**: **Catch2 v3** + strict Test-Driven Development (TDD).  
+**Rationale**:  
+- Catch2’s expression-based assertions and optional BDD style (`SCENARIO` / `GIVEN` / `WHEN` / `THEN`) produce highly readable tests that themselves teach the mathematics and expected behaviour.  
+- Low boilerplate keeps the focus on the algorithm rather than the test harness.  
+- Excellent fit for a mastery-oriented codebase where tests should be easy to read and reason about.  
+- Available via vcpkg and integrates cleanly with CMake.  
+
+Google Test remains a possible future addition if we need its death-test facilities or extremely advanced matchers, but Catch2 is the default.
+
+**TDD Workflow (mandatory for core modules)**:
+1. Write a failing test that expresses the desired behaviour or mathematical property.
+2. Implement the minimal code that makes the test pass.
+3. Refactor while keeping the test green.
+4. Only then move to the next behaviour.
+
+This applies especially to: math types, pose evaluation, blending, IK solvers, and skinning.
+
+Visual regression via the sample viewer remains essential for skinning and rendering artefacts that pure unit tests cannot catch.
 
 ## Open Questions (to be decided later)
 - Exact animation compression format.

@@ -6,10 +6,11 @@ This project is both a learning vehicle and a production-quality foundation. Con
 
 1. Open an issue describing the technique or fix (use the templates).
 2. Work on a feature branch.
-3. Keep commits focused and well-described.
-4. Ensure the CPU reference path still works when adding a GPU path.
-5. Update the relevant documentation (especially DESIGN_DECISIONS.md and BACKLOG.md).
-6. Open a pull request against `main`.
+3. **Follow TDD** for all core math and animation code (see `docs/TESTING.md`).
+4. Keep commits focused and well-described.
+5. Ensure the CPU reference path still works when adding a GPU path.
+6. Update the relevant documentation (especially `DESIGN_DECISIONS.md` and `BACKLOG.md`).
+7. Open a pull request against `main`.
 
 ## Code Standards
 
@@ -21,8 +22,12 @@ This project is both a learning vehicle and a production-quality foundation. Con
 
 ## Testing
 
-- Unit tests for all new math and evaluation logic.
-- Visual validation via the sample viewer when the change affects rendering or skinning.
+- **Catch2 v3** is the required testing framework.
+- TDD is mandatory for core modules (math, pose evaluation, blending, IK, skinning).
+- Write the failing test first, implement, then refactor.
+- Visual validation via the sample viewer is required for any change that affects skinning or rendering.
+
+See `docs/TESTING.md` for full details.
 
 ## Documentation
 

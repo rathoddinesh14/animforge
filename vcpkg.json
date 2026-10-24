@@ -10,6 +10,6 @@
       "platform": "!osx"
     },
     "glm",
-    "gtest"
+    "catch2"
   ]
 }
