@@ -50,6 +50,7 @@ cmake --build --preset windows-msvc-debug
 | [docs/MATH_CONVENTIONS.md](docs/MATH_CONVENTIONS.md) | Coordinate system, matrix layout, quaternion conventions |
 | [docs/PERFORMANCE_BUDGETS.md](docs/PERFORMANCE_BUDGETS.md) | Target frame budgets and memory |
 | [docs/ASSET_PIPELINE.md](docs/ASSET_PIPELINE.md) | Expected asset formats and conversion |
+| [docs/TESTING.md](docs/TESTING.md) | TDD workflow and Catch2 usage |
 
 ## License
 
