@@ -15,9 +15,10 @@ This project is both a learning vehicle and a production-quality foundation. Con
 ## Code Standards
 
 - C++20 minimum.
-- Follow `.clang-format`.
+- Follow `.clang-format` and the full guide in `docs/CODING_STANDARDS.md`.
 - Prefer clear, explicit code over clever abstractions.
 - Hot paths should be data-oriented.
+- Public API must be documented (`@param`, `@return`).
 - No silent failures in math or pose evaluation; use assertions in debug.
 
 ## Testing
