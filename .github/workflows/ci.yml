@@ -20,9 +20,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install glad2 Python deps
-        run: python -m pip install jinja2
-
       - name: Configure
         run: |
           cmake -S . -B build -A x64 `
@@ -47,10 +44,9 @@ jobs:
       - name: Install build tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build g++ python3 python3-pip \
+          sudo apt-get install -y cmake ninja-build g++ python3 \
             libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev \
             libxcursor-dev libxi-dev libwayland-dev libxkbcommon-dev
-          python3 -m pip install --user jinja2
 
       - name: Configure
         run: |
@@ -103,10 +99,9 @@ jobs:
       - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang-tidy-17 cmake ninja-build g++ python3 python3-pip \
+          sudo apt-get install -y clang-tidy-17 cmake ninja-build g++ python3 \
             libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev \
             libxcursor-dev libxi-dev
-          python3 -m pip install --user jinja2
 
       - name: Configure
         run: |

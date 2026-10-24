@@ -39,12 +39,17 @@ if(AGA_USE_OPENGL)
         src/platform/Window.cpp
         src/rhi/DeviceFactory.cpp
         src/rhi/opengl/OpenGLDevice.cpp
+        src/rhi/opengl/GlLoader.cpp
     )
     target_link_libraries(aga_core
         PUBLIC
             glfw
-            glad_gl_core_45
     )
+    # Linux needs explicit OpenGL library for glfw apps
+    find_package(OpenGL QUIET)
+    if(OpenGL_FOUND)
+        target_link_libraries(aga_core PUBLIC OpenGL::GL)
+    endif()
     target_compile_definitions(aga_core PUBLIC AGA_USE_OPENGL=1)
     target_include_directories(aga_core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 endif()

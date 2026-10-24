@@ -5,10 +5,7 @@
 namespace aga::rhi {
 
 /// Graphics API selected at runtime via the device factory.
-enum class Backend : std::uint8_t {
-    OpenGL = 0,
-    Vulkan = 1
-};
+enum class Backend : std::uint8_t { OpenGL = 0, Vulkan = 1 };
 
 /// Primitive assembly mode. Mapped to GL/Vulkan topology enums inside each backend.
 enum class PrimitiveTopology : std::uint8_t {

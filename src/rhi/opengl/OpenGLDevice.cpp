@@ -1,10 +1,11 @@
 #include "OpenGLDevice.hpp"
 
+#include "GlLoader.hpp"
+
 #include <stdexcept>
 #include <string>
 
 #include <GLFW/glfw3.h>
-#include <glad/gl.h>
 
 namespace aga::rhi {
 namespace {
@@ -53,8 +54,8 @@ OpenGLDevice::OpenGLDevice(GLFWwindow* window, const DeviceDesc& desc)
     }
     glfwMakeContextCurrent(m_window);
 
-    if (!gladLoadGL(glfwGetProcAddress)) {
-        throw std::runtime_error("gladLoadGL failed");
+    if (!loadGl(reinterpret_cast<GLADloadfunc>(glfwGetProcAddress))) {
+        throw std::runtime_error("loadGl failed");
     }
 
     createPipeline();
@@ -87,7 +88,6 @@ void OpenGLDevice::createPipeline() {
     glGenBuffers(1, &m_vbo);
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    // pos: 3 floats, color: 4 floats, stride 7 floats
     const int stride = static_cast<int>(7 * sizeof(float));
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(0));
@@ -119,7 +119,8 @@ void OpenGLDevice::resize(int width, int height) {
 }
 
 void OpenGLDevice::beginFrame(const math::Vec4& clearColor) {
-    glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+    // GLM_FORCE_XYZW_ONLY: use .xyzw not .rgba
+    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -137,8 +138,6 @@ void OpenGLDevice::drawTriangleList(const float* vertices, std::size_t vertexCou
 }
 
 void OpenGLDevice::endFrame() {
-    // Presentation is owned by the platform window (glfwSwapBuffers) so samples
-    // can interleave input. Device does not swap here.
     (void)m_window;
 }
 

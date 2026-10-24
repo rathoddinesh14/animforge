@@ -18,10 +18,9 @@ namespace {
 
 // Interleaved pos.xyz + color.rgba (NDC triangle)
 constexpr float kTriangle[] = {
-    // x, y, z, r, g, b, a
-    0.0f,  0.5f, 0.0f, 1.0f, 0.2f, 0.2f, 1.0f, // top - red
+    0.0f, 0.5f, 0.0f, 1.0f, 0.2f, 0.2f, 1.0f,   // top - red
     -0.5f, -0.5f, 0.0f, 0.2f, 1.0f, 0.2f, 1.0f, // bottom-left - green
-    0.5f,  -0.5f, 0.0f, 0.2f, 0.2f, 1.0f, 1.0f, // bottom-right - blue
+    0.5f, -0.5f, 0.0f, 0.2f, 0.2f, 1.0f, 1.0f,  // bottom-right - blue
 };
 
 } // namespace

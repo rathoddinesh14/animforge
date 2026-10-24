@@ -64,17 +64,4 @@ if(AGA_USE_OPENGL OR AGA_BUILD_SAMPLES)
         FetchContent_MakeAvailable(glfw)
     endif()
 
-    # glad2 generates a loader at configure time (requires Python 3).
-    if(NOT TARGET glad_gl_core_45)
-        find_package(Python3 COMPONENTS Interpreter REQUIRED)
-        FetchContent_Declare(
-            glad
-            GIT_REPOSITORY https://github.com/Dav1dde/glad.git
-            GIT_TAG        v2.0.8
-            GIT_SHALLOW    TRUE
-            SOURCE_SUBDIR  cmake
-        )
-        FetchContent_MakeAvailable(glad)
-        glad_add_library(glad_gl_core_45 STATIC REPRODUCIBLE LOADER API gl:core=4.5)
-    endif()
 endif()
