@@ -2,14 +2,20 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, "ci/**"]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
-# Free-tier friendly: keep the matrix small and cache aggressively.
+# Free-tier friendly: small matrix, cancel superseded runs.
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+env:
+  # Full SHA for lukka/run-vcpkg (tag names are rejected).
+  # microsoft/vcpkg tag 2024.11.16
+  VCPKG_COMMIT: b2cb0da531c2f1f740045bfe7c4dac59f0b2b69c
 
 jobs:
   # ---------------------------------------------------------------------------
@@ -23,21 +29,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup MSVC
-        uses: ilammy/msvc-dev-cmd@v1
-
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
         with:
           vcpkgDirectory: ${{ github.workspace }}/external/vcpkg
-          vcpkgGitCommitId: "2024.11.16"   # pin for reproducibility; update periodically
-          vcpkgJsonGlob: "vcpkg.json"
+          vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
+          vcpkgJsonGlob: vcpkg.json
 
       - name: Configure (CMake + vcpkg)
         run: |
           cmake -S . -B build `
-            -G "Ninja" `
-            -DCMAKE_BUILD_TYPE=Release `
+            -G "Visual Studio 17 2022" -A x64 `
             -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/external/vcpkg/scripts/buildsystems/vcpkg.cmake `
             -DVCPKG_TARGET_TRIPLET=x64-windows `
             -DAGA_BUILD_TESTS=ON `
@@ -68,7 +70,7 @@ jobs:
           exclude-regex: "build|external|_deps|third_party|vcpkg_installed"
 
   # ---------------------------------------------------------------------------
-  # Light static analysis (Ubuntu, free-tier friendly)
+  # Light static analysis (Ubuntu)
   # ---------------------------------------------------------------------------
   clang-tidy:
     name: clang-tidy
@@ -87,8 +89,8 @@ jobs:
         uses: lukka/run-vcpkg@v11
         with:
           vcpkgDirectory: ${{ github.workspace }}/external/vcpkg
-          vcpkgGitCommitId: "2024.11.16"
-          vcpkgJsonGlob: "vcpkg.json"
+          vcpkgGitCommitId: ${{ env.VCPKG_COMMIT }}
+          vcpkgJsonGlob: vcpkg.json
 
       - name: Configure with compile_commands
         run: |
@@ -106,13 +108,11 @@ jobs:
 
       - name: Run clang-tidy
         run: |
-          if [ -f build-tidy/compile_commands.json ]; then
-            # Analyze test translation units; public headers are covered via HeaderFilterRegex
-            clang-tidy-17 -p build-tidy \
-              tests/math/test_glm_integration.cpp \
-              src/math/math_dummy.cpp \
-              --quiet
-          else
+          if [ ! -f build-tidy/compile_commands.json ]; then
             echo "compile_commands.json missing" >&2
             exit 1
           fi
+          clang-tidy-17 -p build-tidy \
+            tests/math/test_glm_integration.cpp \
+            src/math/math_dummy.cpp \
+            --quiet

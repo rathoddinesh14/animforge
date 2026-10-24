@@ -48,8 +48,8 @@ TEST_CASE("Right-handed coordinate system – cross product of X and Y yields +Z
 TEST_CASE("Transform::to_mat4 produces T * R * S (column-major)", "[math][transform]") {
     Transform t;
     t.translation = Vec3{10.0f, 20.0f, 30.0f};
-    t.rotation    = angle_axis(glm::radians(90.0f), UNIT_Y);
-    t.scale       = Vec3{2.0f, 2.0f, 2.0f};
+    t.rotation = angle_axis(glm::radians(90.0f), UNIT_Y);
+    t.scale = Vec3{2.0f, 2.0f, 2.0f};
 
     Mat4 m = t.to_mat4();
 
