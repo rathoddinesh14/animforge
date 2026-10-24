@@ -11,12 +11,13 @@ This document records the major technical choices and the reasoning behind them.
 **Rationale**: Industry standard, excellent Visual Studio integration, reproducible dependencies via manifests. Avoids custom build scripts.
 
 ## 3. Math Library
-**Choice**: Thin custom math layer (`aga::math`) with optional GLM for samples and interop.  
+**Choice**: **GLM** as the primary mathematics library, configured and exposed through `aga::math`.  
 **Rationale**:  
-- Full control over conventions (column-major, right-handed, Y-up).  
-- No hidden costs or unexpected operator behavior.  
-- Easy to teach and audit the exact operations used in skinning and IK.  
-GLM remains available for rapid prototyping and comparison.
+- GLM is designed to match OpenGL/GLSL conventions (column-major, right-handed).  
+- Excellent consistency with both OpenGL and Vulkan (Vulkan only requires a Y-flip + [0,1] depth in the projection matrix).  
+- Mature, widely understood, header-only, and available via vcpkg.  
+- We force the exact configuration we need via compile definitions and a thin `aga/math/math.hpp` header so that every translation unit sees the same conventions.  
+- A pure custom math layer remains an option later if we need maximum control or smaller binary size; for now GLM gives the best productivity / correctness trade-off while we master animation techniques.
 
 ## 4. Asset Format
 **Choice**: glTF 2.0 as primary runtime format. Assimp as optional importer for authoring formats.  
