@@ -7,20 +7,17 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Free-tier friendly: small matrix, cancel superseded runs.
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  # Full SHA for lukka/run-vcpkg (tag names are rejected).
-  # microsoft/vcpkg tag 2024.11.16
+  # Full SHA required by lukka/run-vcpkg (tag 2024.11.16)
   VCPKG_COMMIT: b2cb0da531c2f1f740045bfe7c4dac59f0b2b69c
+  # Disable GHA binary cache source (avoids ACTIONS_RUNTIME_TOKEN requirement)
+  VCPKG_BINARY_SOURCES: "clear;default,readwrite"
 
 jobs:
-  # ---------------------------------------------------------------------------
-  # Primary platform: Windows (MSVC) – build + test
-  # ---------------------------------------------------------------------------
   windows-build-test:
     name: Windows Build & Test
     runs-on: windows-latest
@@ -51,9 +48,6 @@ jobs:
       - name: Test
         run: ctest --test-dir build -C Release --output-on-failure --parallel 4
 
-  # ---------------------------------------------------------------------------
-  # Formatting (cheap, Ubuntu)
-  # ---------------------------------------------------------------------------
   format-check:
     name: clang-format
     runs-on: ubuntu-latest
@@ -63,15 +57,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run clang-format
-        uses: jidicula/clang-format-action@v4.13.0
+        uses: jidicula/clang-format-action@v4.14.0
         with:
           clang-format-version: "17"
           check-path: "."
+          fallback-style: "file"
           exclude-regex: "build|external|_deps|third_party|vcpkg_installed"
 
-  # ---------------------------------------------------------------------------
-  # Light static analysis (Ubuntu)
-  # ---------------------------------------------------------------------------
   clang-tidy:
     name: clang-tidy
     runs-on: ubuntu-latest
