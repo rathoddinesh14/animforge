@@ -35,7 +35,7 @@ TEST_CASE("GLM quaternion storage is (w, x, y, z) and identity is correct", "[ma
     REQUIRE(q.z == Approx(0.0f));
 }
 
-TEST_CASE("Right-handed coordinate system – cross product of X and Y yields +Z", "[math][glm]") {
+TEST_CASE("Right-handed coordinate system - cross product of X and Y yields +Z", "[math][glm]") {
     Vec3 x = UNIT_X;
     Vec3 y = UNIT_Y;
     Vec3 z = glm::cross(x, y);
