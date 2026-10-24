@@ -7,8 +7,9 @@ Use GitHub Issues with labels: `phase-0`, `phase-1`, `phase-2`, … and `math`, 
 - [x] Testing strategy decided: Catch2 v3 + mandatory TDD
 - [ ] CMake + vcpkg skeleton builds on Windows
 - [ ] Basic logging & assertion macros
-- [ ] Math library (Vec3, Quat, Mat4, Transform) driven by TDD + Catch2
-- [ ] MATH_CONVENTIONS.md finalized and enforced
+- [x] GLM integrated as primary math library via aga::math
+- [x] Catch2 tests for GLM integration and conventions
+- [x] MATH_CONVENTIONS.md finalized and enforced
 
 ## Phase 1 – Single Skeleton + Linear Blend Skinning
 - [ ] glTF skeleton + mesh loader (minimal, or via tinygltf)
