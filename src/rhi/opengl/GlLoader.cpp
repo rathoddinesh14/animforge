@@ -4,6 +4,7 @@ PFNGLCLEARCOLORPROC glClearColor = nullptr;
 PFNGLCLEARPROC glClear = nullptr;
 PFNGLVIEWPORTPROC glViewport = nullptr;
 PFNGLDRAWARRAYSPROC glDrawArrays = nullptr;
+PFNGLPOINTSIZEPROC glPointSize = nullptr;
 PFNGLGENBUFFERSPROC glGenBuffers = nullptr;
 PFNGLBINDBUFFERPROC glBindBuffer = nullptr;
 PFNGLBUFFERDATAPROC glBufferData = nullptr;
@@ -43,6 +44,7 @@ bool loadGl(GLADloadfunc load) {
     ok = loadProc(glClear, load, "glClear") && ok;
     ok = loadProc(glViewport, load, "glViewport") && ok;
     ok = loadProc(glDrawArrays, load, "glDrawArrays") && ok;
+    ok = loadProc(glPointSize, load, "glPointSize") && ok;
     ok = loadProc(glGenBuffers, load, "glGenBuffers") && ok;
     ok = loadProc(glBindBuffer, load, "glBindBuffer") && ok;
     ok = loadProc(glBufferData, load, "glBufferData") && ok;

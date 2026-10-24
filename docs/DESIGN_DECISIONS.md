@@ -74,8 +74,8 @@ Visual regression via the sample viewer remains essential for skinning and rende
 - Vulkan-shaped contracts (explicit resources, command recording mindset) even when the first implementation is OpenGL.
 - GLFW is the de-facto portable window/context layer for both APIs.
 
-**First milestone**: Debug primitives only (points, lines, triangles) + Hello Triangle sample on OpenGL.
-**Not first**: Full retained mesh engine, material system, or Vulkan implementation.
+**First milestone**: Educational samples that draw point, line, and triangle on OpenGL, then Vulkan.
+**Not first**: Production DebugDraw system or full retained mesh engine.
 
 ## Open Questions (to be decided later)
 - Exact animation compression format.

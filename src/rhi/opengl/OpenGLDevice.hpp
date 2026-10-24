@@ -14,7 +14,8 @@ public:
     [[nodiscard]] Backend backend() const noexcept override { return Backend::OpenGL; }
     void resize(int width, int height) override;
     void beginFrame(const math::Vec4& clearColor) override;
-    void drawTriangleList(const float* vertices, std::size_t vertexCount) override;
+    void draw(PrimitiveTopology topology, const float* vertices,
+              std::size_t vertexCount) override;
     void endFrame() override;
     [[nodiscard]] std::string_view name() const noexcept override { return "OpenGL"; }
 

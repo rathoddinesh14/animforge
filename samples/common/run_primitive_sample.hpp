@@ -1,55 +1,28 @@
+#pragma once
+
 /**
- * Sample 00: Hello Triangle
- *
- * Draws a single colored triangle through aga::rhi::IDevice (OpenGL backend).
- * Same call pattern will target Vulkan once that backend is implemented.
- *
- * Run:  aga_sample_00_hello_triangle
- * Esc / close window to exit.
+ * Shared main-loop for OpenGL primitive samples.
+ * Each sample only chooses title, topology, and geometry.
  */
 
 #include <aga/platform/Window.hpp>
 #include <aga/rhi/DeviceFactory.hpp>
+#include <aga/rhi/Types.hpp>
 
 #include <cstdio>
 #include <cstdlib>
+#include <string>
+#include <string_view>
 
-namespace {
+#include "common/Geometry.hpp"
 
-// Interleaved pos.xyz + color.rgba (NDC triangle)
-constexpr float kTriangle[] = {
-    // top - red
-    0.0f,
-    0.5f,
-    0.0f,
-    1.0f,
-    0.2f,
-    0.2f,
-    1.0f,
-    // bottom-left - green
-    -0.5f,
-    -0.5f,
-    0.0f,
-    0.2f,
-    1.0f,
-    0.2f,
-    1.0f,
-    // bottom-right - blue
-    0.5f,
-    -0.5f,
-    0.0f,
-    0.2f,
-    0.2f,
-    1.0f,
-    1.0f,
-};
+namespace aga::samples {
 
-} // namespace
-
-int main() {
+inline int runOpenGLPrimitiveSample(std::string_view windowTitle, aga::rhi::PrimitiveTopology topology,
+                                    GeometryView geometry) {
     try {
         aga::platform::WindowDesc wdesc;
-        wdesc.title = "AnimForge - 00 Hello Triangle (OpenGL)";
+        wdesc.title = std::string(windowTitle);
         wdesc.width = 1280;
         wdesc.height = 720;
         aga::platform::Window window(wdesc);
@@ -57,7 +30,6 @@ int main() {
         aga::rhi::DeviceDesc ddesc;
         ddesc.framebufferWidth = window.width();
         ddesc.framebufferHeight = window.height();
-        ddesc.debug = true;
 
         auto device = aga::rhi::createDevice(aga::rhi::Backend::OpenGL, window.handle(), ddesc);
         if (!device) {
@@ -66,17 +38,13 @@ int main() {
         }
 
         window.setResizeCallback([&](int w, int h) { device->resize(w, h); });
-
-        std::printf("Backend: %.*s\n", static_cast<int>(device->name().size()),
-                    device->name().data());
+        std::printf("Backend: %.*s\n", static_cast<int>(device->name().size()), device->name().data());
 
         while (!window.shouldClose()) {
             window.pollEvents();
-
             device->beginFrame(aga::math::Vec4{0.08f, 0.08f, 0.1f, 1.0f});
-            device->drawTriangleList(kTriangle, 3);
+            device->draw(topology, geometry.data, geometry.vertexCount);
             device->endFrame();
-
             window.swapBuffers();
         }
     } catch (const std::exception& ex) {
@@ -85,3 +53,5 @@ int main() {
     }
     return EXIT_SUCCESS;
 }
+
+} // namespace aga::samples

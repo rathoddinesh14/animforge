@@ -13,12 +13,13 @@ Use GitHub Issues with labels: `phase-0`, `phase-1`, `phase-2`, … and `math`, 
 - [x] Catch2 tests for GLM integration and conventions
 - [x] MATH_CONVENTIONS.md finalized and enforced
 
-## Phase 0.5 – RHI + Debug Primitives
-- [x] RHI types + IDevice + DeviceFactory (runtime switch)
-- [x] GLFW window abstraction
-- [x] OpenGL device + Hello Triangle sample
-- [ ] DebugDraw (points, lines, triangles batched)
-- [ ] Vulkan device implementing IDevice
+## Phase 0.5 – Primitive samples (OpenGL + Vulkan)
+- [x] Shared sample geometry (point, line, triangle)
+- [x] OpenGL samples: triangle, line, points
+- [x] Thin IDevice draw(topology) for GL samples
+- [ ] Vulkan sample: triangle (full swapchain + draw)
+- [ ] Vulkan samples: line, points
+- [ ] Optional: fold samples behind --api/--prim later
 
 ## Phase 1 – Single Skeleton + Linear Blend Skinning
 - [ ] glTF skeleton + mesh loader (minimal, or via tinygltf)

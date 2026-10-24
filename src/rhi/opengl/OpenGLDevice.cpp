@@ -125,16 +125,46 @@ void OpenGLDevice::beginFrame(const math::Vec4& clearColor) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void OpenGLDevice::drawTriangleList(const float* vertices, std::size_t vertexCount) {
-    if (!vertices || vertexCount < 3 || (vertexCount % 3) != 0) {
+void OpenGLDevice::draw(PrimitiveTopology topology, const float* vertices,
+                         std::size_t vertexCount) {
+    if (!vertices || vertexCount == 0) {
         return;
     }
+
+    GLenum mode = GL_TRIANGLES;
+    switch (topology) {
+    case PrimitiveTopology::PointList:
+        mode = GL_POINTS;
+        if (glPointSize) {
+            glPointSize(12.0f);
+        }
+        break;
+    case PrimitiveTopology::LineList:
+        mode = GL_LINES;
+        if ((vertexCount % 2) != 0) {
+            return;
+        }
+        break;
+    case PrimitiveTopology::LineStrip:
+        mode = GL_LINE_STRIP;
+        break;
+    case PrimitiveTopology::TriangleList:
+        mode = GL_TRIANGLES;
+        if ((vertexCount % 3) != 0) {
+            return;
+        }
+        break;
+    case PrimitiveTopology::TriangleStrip:
+        mode = GL_TRIANGLES;
+        break;
+    }
+
     const auto byteSize = static_cast<GLsizeiptr>(vertexCount * 7 * sizeof(float));
     glUseProgram(m_program);
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, byteSize, vertices, GL_DYNAMIC_DRAW);
-    glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexCount));
+    glDrawArrays(mode, 0, static_cast<GLsizei>(vertexCount));
     glBindVertexArray(0);
 }
 
