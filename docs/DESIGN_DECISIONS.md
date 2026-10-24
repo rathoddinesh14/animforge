@@ -66,6 +66,17 @@ This applies especially to: math types, pose evaluation, blending, IK solvers, a
 
 Visual regression via the sample viewer remains essential for skinning and rendering artefacts that pure unit tests cannot catch.
 
+## 11. Render Hardware Interface (RHI)
+**Choice**: Runtime-swappable backend via factory + virtual `IDevice` (`aga::rhi`). OpenGL first; Vulkan second. GLFW for windowing/input on all platforms.
+**Rationale**:
+- Animation and debug code must not depend on GL or Vulkan headers.
+- Runtime switch enables A/B comparison and a single sample binary.
+- Vulkan-shaped contracts (explicit resources, command recording mindset) even when the first implementation is OpenGL.
+- GLFW is the de-facto portable window/context layer for both APIs.
+
+**First milestone**: Debug primitives only (points, lines, triangles) + Hello Triangle sample on OpenGL.
+**Not first**: Full retained mesh engine, material system, or Vulkan implementation.
+
 ## Open Questions (to be decided later)
 - Exact animation compression format.
 - Whether to adopt a full ECS or keep a simpler hierarchical model for characters.

@@ -9,12 +9,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 option(AGA_BUILD_SAMPLES "Build sample applications" ON)
 option(AGA_BUILD_TESTS "Build unit tests" ON)
 option(AGA_USE_OPENGL "Enable OpenGL backend" ON)
-option(AGA_USE_VULKAN "Enable Vulkan backend" ON)
+option(AGA_USE_VULKAN "Enable Vulkan backend" OFF)
 
 # Warnings
 include(cmake/CompilerWarnings.cmake)
 
-# Dependencies (vcpkg)
+# Dependencies (vcpkg or FetchContent)
 include(cmake/Dependencies.cmake)
 
 # Core library
@@ -29,15 +29,32 @@ target_link_libraries(aga_core
         glm::glm
 )
 
-# Header-only math for now – force at least one translation unit so the static lib is not empty
 target_sources(aga_core PRIVATE
     src/math/math_dummy.cpp
 )
 
+# OpenGL RHI + platform (window)
+if(AGA_USE_OPENGL)
+    target_sources(aga_core PRIVATE
+        src/platform/Window.cpp
+        src/rhi/DeviceFactory.cpp
+        src/rhi/opengl/OpenGLDevice.cpp
+    )
+    target_link_libraries(aga_core
+        PUBLIC
+            glfw
+            glad_gl_core_45
+    )
+    target_compile_definitions(aga_core PUBLIC AGA_USE_OPENGL=1)
+    target_include_directories(aga_core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+endif()
+
 # Samples
 if(AGA_BUILD_SAMPLES)
-    # Placeholder until we have real samples
-    # add_subdirectory(samples)
+    if(NOT AGA_USE_OPENGL)
+        message(WARNING "AGA_BUILD_SAMPLES is ON but AGA_USE_OPENGL is OFF - samples may not link")
+    endif()
+    add_subdirectory(samples)
 endif()
 
 # Tests

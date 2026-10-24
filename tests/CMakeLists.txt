@@ -2,6 +2,7 @@
 
 add_executable(aga_tests
     math/test_glm_integration.cpp
+    rhi/test_rhi_types.cpp
 )
 
 target_link_libraries(aga_tests
@@ -16,6 +17,5 @@ target_include_directories(aga_tests
         ${CMAKE_SOURCE_DIR}/include
 )
 
-# Discover tests for CTest
 include(Catch)
 catch_discover_tests(aga_tests)
