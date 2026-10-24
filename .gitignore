@@ -1,0 +1,39 @@
+# Build
+build/
+out/
+cmake-build-*/
+.vs/
+.vscode/
+*.user
+*.suo
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+*.vcxproj*
+*.sln
+compile_commands.json
+
+# vcpkg
+external/vcpkg/
+vcpkg_installed/
+
+# IDE
+.idea/
+*.swp
+*~
+
+# Assets (large)
+assets/models/*.glb
+assets/models/*.gltf
+!assets/models/.gitkeep
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs / temp
+*.log
+*.tmp
+*.bak

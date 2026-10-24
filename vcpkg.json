@@ -1,0 +1,15 @@
+{
+  "name": "animforge",
+  "version-string": "0.1.0",
+  "description": "Advanced real-time game animation systems in modern C++ with OpenGL and Vulkan",
+  "dependencies": [
+    "glfw3",
+    "glad",
+    {
+      "name": "vulkan",
+      "platform": "!osx"
+    },
+    "glm",
+    "gtest"
+  ]
+}
