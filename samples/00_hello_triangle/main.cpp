@@ -47,7 +47,8 @@ int main() {
 
         window.setResizeCallback([&](int w, int h) { device->resize(w, h); });
 
-        std::printf("Backend: %.*s\n", static_cast<int>(device->name().size()), device->name().data());
+        std::printf("Backend: %.*s\n", static_cast<int>(device->name().size()),
+                    device->name().data());
 
         while (!window.shouldClose()) {
             window.pollEvents();

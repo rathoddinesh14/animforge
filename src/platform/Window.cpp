@@ -22,7 +22,7 @@ Window::Window(const WindowDesc& desc) : m_width(desc.width), m_height(desc.heig
     }
     glfwSetErrorCallback(glfwErrorCallback);
 
-    // OpenGL 4.5 core — matches our target for skinning samples later.
+    // OpenGL 4.5 core - matches our target for skinning samples later.
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -53,13 +53,21 @@ Window::~Window() {
     glfwTerminate();
 }
 
-bool Window::shouldClose() const { return glfwWindowShouldClose(m_window) == GLFW_TRUE; }
+bool Window::shouldClose() const {
+    return glfwWindowShouldClose(m_window) == GLFW_TRUE;
+}
 
-void Window::pollEvents() { glfwPollEvents(); }
+void Window::pollEvents() {
+    glfwPollEvents();
+}
 
-void Window::swapBuffers() { glfwSwapBuffers(m_window); }
+void Window::swapBuffers() {
+    glfwSwapBuffers(m_window);
+}
 
-void Window::setResizeCallback(ResizeCallback cb) { m_resizeCallback = std::move(cb); }
+void Window::setResizeCallback(ResizeCallback cb) {
+    m_resizeCallback = std::move(cb);
+}
 
 void Window::framebufferSizeCallback(GLFWwindow* window, int width, int height) {
     auto* self = static_cast<Window*>(glfwGetWindowUserPointer(window));

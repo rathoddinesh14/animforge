@@ -3,8 +3,8 @@
 #include <stdexcept>
 #include <string>
 
-#include <glad/gl.h>
 #include <GLFW/glfw3.h>
+#include <glad/gl.h>
 
 namespace aga::rhi {
 namespace {
@@ -61,7 +61,9 @@ OpenGLDevice::OpenGLDevice(GLFWwindow* window, const DeviceDesc& desc)
     resize(m_width, m_height);
 }
 
-OpenGLDevice::~OpenGLDevice() { destroyPipeline(); }
+OpenGLDevice::~OpenGLDevice() {
+    destroyPipeline();
+}
 
 void OpenGLDevice::createPipeline() {
     const unsigned vs = compileShader(GL_VERTEX_SHADER, kVertexShader);
