@@ -1,14 +1,23 @@
 BasedOnStyle: LLVM
+Language: Cpp
+Standard: c++20
+
 IndentWidth: 4
+TabWidth: 4
+UseTab: Never
 ColumnLimit: 100
+
 AccessModifierOffset: -4
 AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
+AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBraces: Attach
+BreakConstructorInitializers: BeforeColon
+CompactNamespaces: false
+Cpp11BracedListStyle: true
 NamespaceIndentation: None
 PointerAlignment: Left
 SortIncludes: true
-SpaceAfterCStyleCast: true
+SpaceAfterCStyleCast: false
 SpaceBeforeParens: ControlStatements
-Standard: c++20

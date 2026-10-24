@@ -1,5 +1,5 @@
-#include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include <aga/math/math.hpp>
 
@@ -35,7 +35,7 @@ TEST_CASE("GLM quaternion storage is (w, x, y, z) and identity is correct", "[ma
     REQUIRE(q.z == Approx(0.0f));
 }
 
-TEST_CASE("Right-handed coordinate system – cross product of X and Y yields +Z", "[math][glm]") {
+TEST_CASE("Right-handed coordinate system - cross product of X and Y yields +Z", "[math][glm]") {
     Vec3 x = UNIT_X;
     Vec3 y = UNIT_Y;
     Vec3 z = glm::cross(x, y);
@@ -48,8 +48,8 @@ TEST_CASE("Right-handed coordinate system – cross product of X and Y yields +Z
 TEST_CASE("Transform::to_mat4 produces T * R * S (column-major)", "[math][transform]") {
     Transform t;
     t.translation = Vec3{10.0f, 20.0f, 30.0f};
-    t.rotation    = angle_axis(glm::radians(90.0f), UNIT_Y);
-    t.scale       = Vec3{2.0f, 2.0f, 2.0f};
+    t.rotation = angle_axis(glm::radians(90.0f), UNIT_Y);
+    t.scale = Vec3{2.0f, 2.0f, 2.0f};
 
     Mat4 m = t.to_mat4();
 

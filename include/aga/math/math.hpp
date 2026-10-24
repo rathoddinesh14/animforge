@@ -8,13 +8,10 @@
 
 // GLM configuration – must appear before any GLM header
 #define GLM_FORCE_RADIANS
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE   // Vulkan-style depth; OpenGL path will adjust if needed
-#define GLM_FORCE_LEFT_HANDED        // We override this – see note below
-// Actually we want right-handed. GLM default is right-handed when LEFT_HANDED is not defined.
-#undef GLM_FORCE_LEFT_HANDED
-
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE // Vulkan-style depth; OpenGL path adjusts if needed
+// Right-handed is GLM default when GLM_FORCE_LEFT_HANDED is not defined.
 #define GLM_FORCE_XYZW_ONLY
-#define GLM_ENABLE_EXPERIMENTAL      // for matrix_transform, quaternion extras if needed
+#define GLM_ENABLE_EXPERIMENTAL // matrix_transform, quaternion extras
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -26,12 +23,12 @@
 namespace aga::math {
 
 // Type aliases – single source of truth for the whole engine
-using Vec2  = glm::vec2;
-using Vec3  = glm::vec3;
-using Vec4  = glm::vec4;
-using Mat3  = glm::mat3;
-using Mat4  = glm::mat4;
-using Quat  = glm::quat;
+using Vec2 = glm::vec2;
+using Vec3 = glm::vec3;
+using Vec4 = glm::vec4;
+using Mat3 = glm::mat3;
+using Mat4 = glm::mat4;
+using Quat = glm::quat;
 
 // Convenience constants
 inline constexpr Vec3 UNIT_X{1.0f, 0.0f, 0.0f};
@@ -55,9 +52,7 @@ struct Transform {
         return t * r * s;
     }
 
-    static Transform identity() {
-        return Transform{};
-    }
+    static Transform identity() { return Transform{}; }
 };
 
 // Free functions that match our coding style
@@ -88,8 +83,8 @@ inline Quat slerp(const Quat& a, const Quat& b, float t) {
 inline Transform lerp(const Transform& a, const Transform& b, float t) {
     Transform result;
     result.translation = lerp(a.translation, b.translation, t);
-    result.rotation    = slerp(a.rotation, b.rotation, t);
-    result.scale       = lerp(a.scale, b.scale, t);
+    result.rotation = slerp(a.rotation, b.rotation, t);
+    result.scale = lerp(a.scale, b.scale, t);
     return result;
 }
 

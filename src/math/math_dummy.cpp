@@ -3,6 +3,6 @@
 #include <aga/math/math.hpp>
 
 namespace aga::math {
-    // Force the compiler to emit something
-    void detail_force_link() {}
-}
+// Force the compiler to emit something
+void detail_force_link() {}
+} // namespace aga::math
