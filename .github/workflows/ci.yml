@@ -1,0 +1,118 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Free-tier friendly: keep the matrix small and cache aggressively.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Primary platform: Windows (MSVC) – build + test
+  # ---------------------------------------------------------------------------
+  windows-build-test:
+    name: Windows Build & Test
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgDirectory: ${{ github.workspace }}/external/vcpkg
+          vcpkgGitCommitId: "2024.11.16"   # pin for reproducibility; update periodically
+          vcpkgJsonGlob: "vcpkg.json"
+
+      - name: Configure (CMake + vcpkg)
+        run: |
+          cmake -S . -B build `
+            -G "Ninja" `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/external/vcpkg/scripts/buildsystems/vcpkg.cmake `
+            -DVCPKG_TARGET_TRIPLET=x64-windows `
+            -DAGA_BUILD_TESTS=ON `
+            -DAGA_BUILD_SAMPLES=OFF
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure --parallel 4
+
+  # ---------------------------------------------------------------------------
+  # Formatting (cheap, Ubuntu)
+  # ---------------------------------------------------------------------------
+  format-check:
+    name: clang-format
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run clang-format
+        uses: jidicula/clang-format-action@v4.13.0
+        with:
+          clang-format-version: "17"
+          check-path: "."
+          exclude-regex: "build|external|_deps|third_party|vcpkg_installed"
+
+  # ---------------------------------------------------------------------------
+  # Light static analysis (Ubuntu, free-tier friendly)
+  # ---------------------------------------------------------------------------
+  clang-tidy:
+    name: clang-tidy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-tidy-17 cmake ninja-build
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgDirectory: ${{ github.workspace }}/external/vcpkg
+          vcpkgGitCommitId: "2024.11.16"
+          vcpkgJsonGlob: "vcpkg.json"
+
+      - name: Configure with compile_commands
+        run: |
+          cmake -S . -B build-tidy \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/external/vcpkg/scripts/buildsystems/vcpkg.cmake \
+            -DVCPKG_TARGET_TRIPLET=x64-linux \
+            -DAGA_BUILD_TESTS=ON \
+            -DAGA_BUILD_SAMPLES=OFF
+
+      - name: Build (generate artifacts for tidy)
+        run: cmake --build build-tidy --parallel
+
+      - name: Run clang-tidy
+        run: |
+          if [ -f build-tidy/compile_commands.json ]; then
+            # Analyze test translation units; public headers are covered via HeaderFilterRegex
+            clang-tidy-17 -p build-tidy \
+              tests/math/test_glm_integration.cpp \
+              src/math/math_dummy.cpp \
+              --quiet
+          else
+            echo "compile_commands.json missing" >&2
+            exit 1
+          fi
