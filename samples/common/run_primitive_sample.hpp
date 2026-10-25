@@ -18,7 +18,8 @@
 
 namespace aga::samples {
 
-inline int runOpenGLPrimitiveSample(std::string_view windowTitle, aga::rhi::PrimitiveTopology topology,
+inline int runOpenGLPrimitiveSample(std::string_view windowTitle,
+                                    aga::rhi::PrimitiveTopology topology,
                                     GeometryView geometry) {
     try {
         aga::platform::WindowDesc wdesc;
@@ -38,7 +39,8 @@ inline int runOpenGLPrimitiveSample(std::string_view windowTitle, aga::rhi::Prim
         }
 
         window.setResizeCallback([&](int w, int h) { device->resize(w, h); });
-        std::printf("Backend: %.*s\n", static_cast<int>(device->name().size()), device->name().data());
+        std::printf("Backend: %.*s\n", static_cast<int>(device->name().size()),
+                    device->name().data());
 
         while (!window.shouldClose()) {
             window.pollEvents();

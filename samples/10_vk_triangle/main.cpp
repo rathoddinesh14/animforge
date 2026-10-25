@@ -173,11 +173,10 @@ int main() {
     }
 
     std::printf("Vulkan device selected. Graphics queue family: %u\n", *queues.graphics);
-    std::printf("Next step in this sample series: swapchain + render pass + pipeline + draw.\n");
-    std::printf(
-        "Closing window ends the sample (device enumeration + surface smoke test).\n");
+    std::printf("Next: swapchain + render pass + pipeline + draw.\n");
+    std::printf("Close the window to exit (instance/surface/device smoke test).\n");
 
-    // Smoke-test loop: no full render yet — validates instance/surface/device.
+    // Smoke-test loop: no full render yet - validates instance/surface/device.
     // Full triangle draw is the next commit on this branch once SPIR-V is embedded.
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
