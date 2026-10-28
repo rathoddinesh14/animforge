@@ -10,9 +10,23 @@ option(AGA_BUILD_SAMPLES "Build sample applications" ON)
 option(AGA_BUILD_TESTS "Build unit tests" ON)
 option(AGA_USE_OPENGL "Enable OpenGL backend" ON)
 option(AGA_USE_VULKAN "Enable Vulkan backend" OFF)
+option(AGA_ENABLE_COVERAGE "Enable code coverage instrumentation for tests" OFF)
+
+if(AGA_BUILD_TESTS)
+    include(CTest)
+endif()
 
 # Warnings
 include(cmake/CompilerWarnings.cmake)
+
+if(AGA_ENABLE_COVERAGE)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        add_compile_options(-O0 -g --coverage)
+        add_link_options(--coverage)
+    else()
+        message(WARNING "Code coverage is only supported with GCC/Clang toolchains.")
+    endif()
+endif()
 
 # Dependencies (vcpkg or FetchContent)
 include(cmake/Dependencies.cmake)
@@ -64,7 +78,6 @@ endif()
 
 # Tests
 if(AGA_BUILD_TESTS)
-    enable_testing()
     add_subdirectory(tests)
 endif()
 

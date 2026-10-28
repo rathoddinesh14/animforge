@@ -22,7 +22,25 @@ A learning- and production-oriented codebase focused on deep understanding and i
 
 Next: Phase 1 – Single skeleton + Linear Blend Skinning (CPU → GPU).
 
-## Quick Start (Windows)
+## Quick Start
+
+### Linux
+
+```bash
+# Prerequisites: CMake ≥ 3.25, Ninja, Git, and the X11/GL development stack
+sudo apt-get update
+sudo apt-get install -y build-essential cmake ninja-build pkg-config \
+    libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
+    libgl1-mesa-dev
+
+git clone https://github.com/rathoddinesh14/animforge.git
+cd animforge
+
+cmake --preset linux-ninja
+cmake --build --preset linux-ninja
+```
+
+### Windows
 
 ```bash
 # Prerequisites: Visual Studio 2022, CMake ≥ 3.25, Git, vcpkg

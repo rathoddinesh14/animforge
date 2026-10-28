@@ -2,6 +2,7 @@
 
 add_executable(aga_tests
     math/test_glm_integration.cpp
+    math/test_math_helpers.cpp
     rhi/test_rhi_types.cpp
     rhi/test_draw_validation.cpp
     samples/test_geometry.cpp

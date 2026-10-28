@@ -47,6 +47,10 @@ endif()
 # GLFW + GLAD (OpenGL samples / RHI)
 # ---------------------------------------------------------------------------
 if(AGA_USE_OPENGL OR AGA_BUILD_SAMPLES)
+    if(UNIX AND NOT APPLE)
+        find_package(X11 REQUIRED COMPONENTS Xrandr Xinerama Xi Xcursor)
+    endif()
+
     find_package(glfw3 CONFIG QUIET)
     if(NOT glfw3_FOUND AND NOT TARGET glfw)
         message(STATUS "glfw not found via find_package - fetching with FetchContent")
