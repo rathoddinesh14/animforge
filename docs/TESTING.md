@@ -86,3 +86,14 @@ Or run the test executable directly for more detailed Catch2 output.
 
 Unit tests cannot catch volume loss, candy-wrapper artefacts, or incorrect bone weights visually.  
 Every skinning and IK change must also be validated in the sample viewer.
+
+## Current unit test coverage (non-GPU)
+
+| Area | File |
+|------|------|
+| Math / GLM conventions | `tests/math/test_glm_integration.cpp` |
+| RHI enums | `tests/rhi/test_rhi_types.cpp` |
+| Draw topology validation | `tests/rhi/test_draw_validation.cpp` |
+| Sample geometry | `tests/samples/test_geometry.cpp` |
+
+GPU samples are not run in CI (no display). They must build when `AGA_BUILD_SAMPLES=ON`.

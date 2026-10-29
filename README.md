@@ -17,25 +17,54 @@ A learning- and production-oriented codebase focused on deep understanding and i
 **Phase 0 – Project Foundation** (this commit)
 
 - Requirements, architecture, design decisions, backlog, and API outline documented.
-- CMake + vcpkg skeleton ready for Windows.
+- CMake build setup for Windows and Linux.
 - Directory structure and coding standards established.
 
 Next: Phase 1 – Single skeleton + Linear Blend Skinning (CPU → GPU).
 
-## Quick Start (Windows)
+## Quick Start
+
+### Linux
 
 ```bash
-# Prerequisites: Visual Studio 2022, CMake ≥ 3.25, Git, vcpkg
+# Prerequisites: CMake ≥ 3.25, Ninja, Git, lcov, and the X11/GL development stack
+sudo apt-get update
+sudo apt-get install -y build-essential cmake ninja-build pkg-config \
+    libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
+    libgl1-mesa-dev lcov
+
 git clone https://github.com/rathoddinesh14/animforge.git
 cd animforge
 
-# Bootstrap vcpkg (or use system-wide)
-git clone https://github.com/microsoft/vcpkg.git external/vcpkg
-./external/vcpkg/bootstrap-vcpkg.bat
+cmake --preset linux-ninja
+cmake --build --preset linux-ninja
+```
+
+### Windows
+
+```bash
+# Prerequisites: Visual Studio 2022 with the Desktop development with C++ workload, CMake ≥ 3.25, and Git
+git clone https://github.com/rathoddinesh14/animforge.git
+cd animforge
 
 # Configure & build (example with Visual Studio generator)
 cmake --preset windows-msvc
 cmake --build --preset windows-msvc-debug
+```
+
+## C++ Formatting
+
+CI checks tracked C++ files with clang-format 17. Install clang-format 17, then run:
+
+```bash
+files=$(git ls-files '*.cpp' '*.hpp' '*.h' '*.cc' '*.cxx')
+printf '%s\n' "$files" | xargs clang-format-17 --dry-run --Werror
+```
+
+To format those files automatically, run:
+
+```bash
+printf '%s\n' "$files" | xargs clang-format-17 -i
 ```
 
 ## Documentation
@@ -52,6 +81,7 @@ cmake --build --preset windows-msvc-debug
 | [docs/ASSET_PIPELINE.md](docs/ASSET_PIPELINE.md) | Expected asset formats and conversion |
 | [docs/TESTING.md](docs/TESTING.md) | TDD workflow and Catch2 usage |
 | [docs/CODING_STANDARDS.md](docs/CODING_STANDARDS.md) | Naming, style, documentation, ownership |
+| [docs/OPENGL_FUNCTION_POINTERS.md](docs/OPENGL_FUNCTION_POINTERS.md) | PFNGL loaders, GLFW_INCLUDE_NONE, GlLoader |
 
 ## License
 

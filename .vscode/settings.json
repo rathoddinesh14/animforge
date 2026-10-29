@@ -1,0 +1,6 @@
+{
+  "cmake.postRunCoverageTarget": "aga_coverage_report",
+  "cmake.coverageInfoFiles": [
+    "${workspaceFolder}/.coverage/coverage.info"
+  ]
+}

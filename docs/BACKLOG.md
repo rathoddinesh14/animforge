@@ -5,13 +5,21 @@ Use GitHub Issues with labels: `phase-0`, `phase-1`, `phase-2`, … and `math`, 
 ## Phase 0 – Foundation (Current)
 - [x] Repository structure & documentation
 - [x] Testing strategy decided: Catch2 v3 + mandatory TDD
-- [x] CMake + vcpkg skeleton builds on Windows
+- [x] CMake build setup supports Windows and Linux
 - [x] GitHub Actions CI (Windows build/test + format + clang-tidy)
 - [x] Coding standards, naming conventions, clang-format, clang-tidy
 - [ ] Basic logging & assertion macros
 - [x] GLM integrated as primary math library via aga::math
 - [x] Catch2 tests for GLM integration and conventions
 - [x] MATH_CONVENTIONS.md finalized and enforced
+
+## Phase 0.5 – Primitive samples (OpenGL + Vulkan)
+- [x] Shared sample geometry (point, line, triangle)
+- [x] OpenGL samples: triangle, line, points
+- [x] Thin IDevice draw(topology) for GL samples
+- [ ] Vulkan sample: triangle (full swapchain + draw)
+- [ ] Vulkan samples: line, points
+- [ ] Optional: fold samples behind --api/--prim later
 
 ## Phase 1 – Single Skeleton + Linear Blend Skinning
 - [ ] glTF skeleton + mesh loader (minimal, or via tinygltf)

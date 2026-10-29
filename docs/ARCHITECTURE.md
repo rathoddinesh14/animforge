@@ -47,14 +47,21 @@
 - `IKSolver` family.
 - `RootMotionExtractor`.
 
-### 3. `aga::rendering`
-- Abstract `SkinningBackend` interface.
-- `OpenGLSkinning` and `VulkanSkinning` implementations.
-- Debug draw utilities.
+### 3. `aga::rhi` (Render Hardware Interface)
+- Runtime-swappable backends (`Backend::OpenGL`, `Backend::Vulkan`).
+- `IDevice` — clear, draw triangle lists, present coordination.
+- OpenGL implementation first; Vulkan later.
+- Public headers never include GL/Vulkan.
 
-### 4. `aga::platform`
-- Window, input, timing (Windows first via Win32 or GLFW).
-- File I/O abstraction.
+### 4. `aga::debug` (planned)
+- `DebugDraw` batches points/lines/triangles for skeleton visualization.
+
+### 5. `aga::platform`
+- GLFW window + context (OpenGL path); Vulkan surface later.
+- Input and timing.
+
+### 6. `aga::rendering` (planned)
+- Skinning backends on top of RHI.
 
 ### 5. `aga::core`
 - Logging, assertions, memory arenas (optional), timing.

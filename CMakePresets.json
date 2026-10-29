@@ -14,11 +14,6 @@
       "architecture": "x64",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
-        },
-        "VCPKG_TARGET_TRIPLET": "x64-windows",
         "AGA_BUILD_SAMPLES": "ON",
         "AGA_BUILD_TESTS": "ON"
       }
@@ -29,12 +24,34 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
-        },
-        "VCPKG_TARGET_TRIPLET": "x64-windows",
+        "AGA_BUILD_SAMPLES": "ON",
+        "AGA_BUILD_TESTS": "ON",
         "CMAKE_CXX_COMPILER": "cl"
+      }
+    },
+    {
+      "name": "linux-ninja",
+      "displayName": "Linux Ninja",
+      "description": "Default Linux configuration using Ninja and the system toolchain",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "AGA_BUILD_SAMPLES": "ON",
+        "AGA_BUILD_TESTS": "ON",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "linux-ninja-coverage",
+      "displayName": "Linux Ninja with coverage",
+      "description": "Linux configuration with GCC/Clang coverage instrumentation enabled",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "AGA_BUILD_SAMPLES": "ON",
+        "AGA_BUILD_TESTS": "ON",
+        "AGA_ENABLE_COVERAGE": "ON",
+        "CMAKE_BUILD_TYPE": "Debug"
       }
     }
   ],
@@ -48,6 +65,16 @@
       "name": "windows-msvc-release",
       "configurePreset": "windows-msvc",
       "configuration": "Release"
+    },
+    {
+      "name": "linux-ninja",
+      "configurePreset": "linux-ninja",
+      "configuration": "Debug"
+    },
+    {
+      "name": "linux-ninja-coverage",
+      "configurePreset": "linux-ninja-coverage",
+      "configuration": "Debug"
     }
   ]
 }

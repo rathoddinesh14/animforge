@@ -3,7 +3,6 @@ build/
 out/
 cmake-build-*/
 .vs/
-.vscode/
 *.user
 *.suo
 CMakeCache.txt
@@ -14,10 +13,7 @@ Makefile
 *.vcxproj*
 *.sln
 compile_commands.json
-
-# vcpkg
-external/vcpkg/
-vcpkg_installed/
+.coverage/
 
 # IDE
 .idea/
