@@ -32,14 +32,17 @@ public:
     /// Begin a frame; @p clearColor is linear RGBA in [0,1] (stored as xyzw).
     virtual void beginFrame(const math::Vec4& clearColor) = 0;
 
-    /**
-     * Draw interleaved pos(float3) + color(float4) vertices.
-     * @param topology    PointList, LineList, or TriangleList for samples.
-     * @param vertices    Tightly packed: x y z r g b a per vertex.
-     * @param vertexCount Number of vertices (must match topology requirements).
-     */
-    virtual void draw(PrimitiveTopology topology, const float* vertices,
-                      std::size_t vertexCount) = 0;
+    /// Vertices use the interleaved layout: x y z r g b a.
+    virtual void drawPoints(const float* vertices,
+                            std::size_t vertexCount) = 0;
+
+    /// Vertices are interpreted as independent pairs.
+    virtual void drawLines(const float* vertices,
+                           std::size_t vertexCount) = 0;
+
+    /// Vertices are interpreted as independent triangles.
+    virtual void drawTriangles(const float* vertices,
+                               std::size_t vertexCount) = 0;
 
     virtual void endFrame() = 0;
 

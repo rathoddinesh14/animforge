@@ -3,6 +3,6 @@
 
 int main() {
     return aga::samples::runOpenGLPrimitiveSample("AnimForge - 01 GL Line",
-                                                  aga::rhi::PrimitiveTopology::LineList,
-                                                  aga::samples::lineGeometry());
+                                                  aga::samples::lineGeometry(),
+                                                  &aga::rhi::IDevice::drawLines);
 }
