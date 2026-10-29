@@ -17,56 +17,18 @@ struct GeometryView {
 
 // Single point at origin (white): x y z r g b a
 inline constexpr float kPointVertices[] = {
-    0.0f,
-    0.0f,
-    0.0f,
-    1.0f,
-    1.0f,
-    1.0f,
-    1.0f,
+    0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
 };
 
 // Line left -> right (cyan): two vertices
 inline constexpr float kLineVertices[] = {
-    -0.75f,
-    0.0f,
-    0.0f,
-    0.2f,
-    0.9f,
-    1.0f,
-    1.0f,
-    0.75f,
-    0.0f,
-    0.0f,
-    0.2f,
-    0.9f,
-    1.0f,
-    1.0f,
+    -0.75f, 0.0f, 0.0f, 0.2f, 0.9f, 1.0f, 1.0f, 0.75f, 0.0f, 0.0f, 0.2f, 0.9f, 1.0f, 1.0f,
 };
 
 // Triangle: top red, bottom-left green, bottom-right blue
 inline constexpr float kTriangleVertices[] = {
-    0.0f,
-    0.5f,
-    0.0f,
-    1.0f,
-    0.2f,
-    0.2f,
-    1.0f,
-    -0.5f,
-    -0.5f,
-    0.0f,
-    0.2f,
-    1.0f,
-    0.2f,
-    1.0f,
-    0.5f,
-    -0.5f,
-    0.0f,
-    0.2f,
-    0.2f,
-    1.0f,
-    1.0f,
+    0.0f, 0.5f, 0.0f, 1.0f, 0.2f,  0.2f, 1.0f, -0.5f, -0.5f, 0.0f, 0.2f,
+    1.0f, 0.2f, 1.0f, 0.5f, -0.5f, 0.0f, 0.2f, 0.2f,  1.0f,  1.0f,
 };
 
 inline GeometryView pointGeometry() {

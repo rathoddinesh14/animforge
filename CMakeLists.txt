@@ -83,17 +83,32 @@ endif()
 
 if(AGA_ENABLE_COVERAGE)
     find_program(LCOV_EXECUTABLE NAMES lcov REQUIRED)
+    set(AGA_COVERAGE_BASE_FILE ${CMAKE_BINARY_DIR}/coverage-base.info)
+    set(AGA_COVERAGE_RUN_FILE ${CMAKE_BINARY_DIR}/coverage-run.info)
+    set(AGA_COVERAGE_MERGED_FILE ${CMAKE_BINARY_DIR}/coverage-merged.info)
+    set(AGA_COVERAGE_INFO_FILE ${CMAKE_SOURCE_DIR}/.coverage/coverage.info)
     add_custom_target(aga_coverage_report
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/.coverage
         COMMAND ${LCOV_EXECUTABLE} --capture
+            --demangle-cpp
+            --initial
+            --directory ${CMAKE_BINARY_DIR}/CMakeFiles/aga_core.dir
+            --output-file ${AGA_COVERAGE_BASE_FILE}
+        COMMAND ${LCOV_EXECUTABLE} --capture
+            --demangle-cpp
+            --ignore-errors source
+            --directory ${CMAKE_BINARY_DIR}/CMakeFiles/aga_core.dir
             --directory ${CMAKE_BINARY_DIR}/tests/CMakeFiles/aga_tests.dir
-            --output-file ${CMAKE_SOURCE_DIR}/.coverage/coverage.info
+            --output-file ${AGA_COVERAGE_RUN_FILE}
+        COMMAND ${LCOV_EXECUTABLE} --add-tracefile ${AGA_COVERAGE_BASE_FILE}
+            --add-tracefile ${AGA_COVERAGE_RUN_FILE}
+            --output-file ${AGA_COVERAGE_MERGED_FILE}
         COMMAND ${LCOV_EXECUTABLE} --remove
-            ${CMAKE_SOURCE_DIR}/.coverage/coverage.info
-            "${CMAKE_BINARY_DIR}/_deps/*"
+            ${AGA_COVERAGE_MERGED_FILE}
+            "${CMAKE_BINARY_DIR}/*"
             "${CMAKE_SOURCE_DIR}/tests/*"
             "/usr/*"
-            --output-file ${CMAKE_SOURCE_DIR}/.coverage/coverage.info
+            --output-file ${AGA_COVERAGE_INFO_FILE}
         DEPENDS aga_tests
         VERBATIM
     )

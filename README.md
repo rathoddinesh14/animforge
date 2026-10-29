@@ -52,6 +52,21 @@ cmake --preset windows-msvc
 cmake --build --preset windows-msvc-debug
 ```
 
+## C++ Formatting
+
+CI checks tracked C++ files with clang-format 17. Install clang-format 17, then run:
+
+```bash
+files=$(git ls-files '*.cpp' '*.hpp' '*.h' '*.cc' '*.cxx')
+printf '%s\n' "$files" | xargs clang-format-17 --dry-run --Werror
+```
+
+To format those files automatically, run:
+
+```bash
+printf '%s\n' "$files" | xargs clang-format-17 -i
+```
+
 ## Documentation
 
 | Document | Purpose |

@@ -19,8 +19,7 @@
 namespace aga::samples {
 
 inline int runOpenGLPrimitiveSample(std::string_view windowTitle,
-                                    aga::rhi::PrimitiveTopology topology,
-                                    GeometryView geometry) {
+                                    aga::rhi::PrimitiveTopology topology, GeometryView geometry) {
     try {
         aga::platform::WindowDesc wdesc;
         wdesc.title = std::string(windowTitle);

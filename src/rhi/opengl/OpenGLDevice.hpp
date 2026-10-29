@@ -11,18 +11,14 @@ public:
     OpenGLDevice(GLFWwindow* window, const DeviceDesc& desc);
     ~OpenGLDevice() override;
 
-    [[nodiscard]] Backend backend() const noexcept override {
-        return Backend::OpenGL;
-    }
+    [[nodiscard]] Backend backend() const noexcept override { return Backend::OpenGL; }
 
     void resize(int width, int height) override;
     void beginFrame(const math::Vec4& clearColor) override;
     void draw(PrimitiveTopology topology, const float* vertices, std::size_t vertexCount) override;
     void endFrame() override;
 
-    [[nodiscard]] std::string_view name() const noexcept override {
-        return "OpenGL";
-    }
+    [[nodiscard]] std::string_view name() const noexcept override { return "OpenGL"; }
 
 private:
     void createPipeline();

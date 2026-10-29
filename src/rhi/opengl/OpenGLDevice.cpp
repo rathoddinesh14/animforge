@@ -127,7 +127,8 @@ void OpenGLDevice::beginFrame(const math::Vec4& clearColor) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void OpenGLDevice::draw(PrimitiveTopology topology, const float* vertices, std::size_t vertexCount) {
+void OpenGLDevice::draw(PrimitiveTopology topology, const float* vertices,
+                        std::size_t vertexCount) {
     if (!vertices || !isValidVertexCount(topology, vertexCount)) {
         return;
     }

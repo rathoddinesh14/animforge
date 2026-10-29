@@ -5,6 +5,7 @@ add_executable(aga_tests
     math/test_math_helpers.cpp
     rhi/test_rhi_types.cpp
     rhi/test_draw_validation.cpp
+    rhi/test_device_factory.cpp
     samples/test_geometry.cpp
 )
 
