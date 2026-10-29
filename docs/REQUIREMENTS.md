@@ -38,7 +38,7 @@
 ## 2. Non-Functional Requirements
 
 ### NFR-1 Platform
-- **Primary**: Windows 10/11, MSVC 2022 (C++20/23), CMake ≥ 3.25, vcpkg.
+- **Primary**: Windows 10/11, MSVC 2022 (C++20/23), CMake ≥ 3.25.
 - Future: Linux (GCC/Clang), macOS (Apple Silicon + Intel).
 - No hard dependency on a full engine; samples are self-contained.
 

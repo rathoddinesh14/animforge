@@ -1,5 +1,5 @@
-# Resolve dependencies: prefer packages already on the system / vcpkg toolchain,
-# otherwise fetch via FetchContent (used by CI on the free tier).
+# Resolve dependencies: prefer packages already on the system, otherwise fetch
+# via FetchContent.
 
 include(FetchContent)
 

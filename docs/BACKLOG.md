@@ -5,7 +5,7 @@ Use GitHub Issues with labels: `phase-0`, `phase-1`, `phase-2`, … and `math`, 
 ## Phase 0 – Foundation (Current)
 - [x] Repository structure & documentation
 - [x] Testing strategy decided: Catch2 v3 + mandatory TDD
-- [x] CMake + vcpkg skeleton builds on Windows
+- [x] CMake build setup supports Windows and Linux
 - [x] GitHub Actions CI (Windows build/test + format + clang-tidy)
 - [x] Coding standards, naming conventions, clang-format, clang-tidy
 - [ ] Basic logging & assertion macros

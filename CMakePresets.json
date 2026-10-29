@@ -14,11 +14,6 @@
       "architecture": "x64",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
-        },
-        "VCPKG_TARGET_TRIPLET": "x64-windows",
         "AGA_BUILD_SAMPLES": "ON",
         "AGA_BUILD_TESTS": "ON"
       }
@@ -29,11 +24,8 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
-        },
-        "VCPKG_TARGET_TRIPLET": "x64-windows",
+        "AGA_BUILD_SAMPLES": "ON",
+        "AGA_BUILD_TESTS": "ON",
         "CMAKE_CXX_COMPILER": "cl"
       }
     },

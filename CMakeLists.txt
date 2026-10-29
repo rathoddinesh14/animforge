@@ -28,7 +28,7 @@ if(AGA_ENABLE_COVERAGE)
     endif()
 endif()
 
-# Dependencies (vcpkg or FetchContent)
+# Dependencies (system packages or FetchContent)
 include(cmake/Dependencies.cmake)
 
 # Core library
@@ -84,15 +84,16 @@ endif()
 if(AGA_ENABLE_COVERAGE)
     find_program(LCOV_EXECUTABLE NAMES lcov REQUIRED)
     add_custom_target(aga_coverage_report
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/.coverage
         COMMAND ${LCOV_EXECUTABLE} --capture
             --directory ${CMAKE_BINARY_DIR}/tests/CMakeFiles/aga_tests.dir
-            --output-file ${CMAKE_BINARY_DIR}/coverage.info
+            --output-file ${CMAKE_SOURCE_DIR}/.coverage/coverage.info
         COMMAND ${LCOV_EXECUTABLE} --remove
-            ${CMAKE_BINARY_DIR}/coverage.info
+            ${CMAKE_SOURCE_DIR}/.coverage/coverage.info
             "${CMAKE_BINARY_DIR}/_deps/*"
             "${CMAKE_SOURCE_DIR}/tests/*"
             "/usr/*"
-            --output-file ${CMAKE_BINARY_DIR}/coverage.info
+            --output-file ${CMAKE_SOURCE_DIR}/.coverage/coverage.info
         DEPENDS aga_tests
         VERBATIM
     )

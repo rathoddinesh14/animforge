@@ -17,7 +17,7 @@ A learning- and production-oriented codebase focused on deep understanding and i
 **Phase 0 – Project Foundation** (this commit)
 
 - Requirements, architecture, design decisions, backlog, and API outline documented.
-- CMake + vcpkg skeleton ready for Windows.
+- CMake build setup for Windows and Linux.
 - Directory structure and coding standards established.
 
 Next: Phase 1 – Single skeleton + Linear Blend Skinning (CPU → GPU).
@@ -43,13 +43,9 @@ cmake --build --preset linux-ninja
 ### Windows
 
 ```bash
-# Prerequisites: Visual Studio 2022, CMake ≥ 3.25, Git, vcpkg
+# Prerequisites: Visual Studio 2022 with the Desktop development with C++ workload, CMake ≥ 3.25, and Git
 git clone https://github.com/rathoddinesh14/animforge.git
 cd animforge
-
-# Bootstrap vcpkg (or use system-wide)
-git clone https://github.com/microsoft/vcpkg.git external/vcpkg
-./external/vcpkg/bootstrap-vcpkg.bat
 
 # Configure & build (example with Visual Studio generator)
 cmake --preset windows-msvc
