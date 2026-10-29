@@ -81,6 +81,23 @@ if(AGA_BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
+if(AGA_ENABLE_COVERAGE)
+    find_program(LCOV_EXECUTABLE NAMES lcov REQUIRED)
+    add_custom_target(aga_coverage_report
+        COMMAND ${LCOV_EXECUTABLE} --capture
+            --directory ${CMAKE_BINARY_DIR}/tests/CMakeFiles/aga_tests.dir
+            --output-file ${CMAKE_BINARY_DIR}/coverage.info
+        COMMAND ${LCOV_EXECUTABLE} --remove
+            ${CMAKE_BINARY_DIR}/coverage.info
+            "${CMAKE_BINARY_DIR}/_deps/*"
+            "${CMAKE_SOURCE_DIR}/tests/*"
+            "/usr/*"
+            --output-file ${CMAKE_BINARY_DIR}/coverage.info
+        DEPENDS aga_tests
+        VERBATIM
+    )
+endif()
+
 message(STATUS "AnimForge configured")
 message(STATUS "  OpenGL : ${AGA_USE_OPENGL}")
 message(STATUS "  Vulkan : ${AGA_USE_VULKAN}")

@@ -1,0 +1,6 @@
+{
+  "cmake.postRunCoverageTarget": "aga_coverage_report",
+  "cmake.coverageInfoFiles": [
+    "${workspaceFolder}/build/linux-ninja-coverage/coverage.info"
+  ]
+}

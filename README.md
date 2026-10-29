@@ -27,11 +27,11 @@ Next: Phase 1 – Single skeleton + Linear Blend Skinning (CPU → GPU).
 ### Linux
 
 ```bash
-# Prerequisites: CMake ≥ 3.25, Ninja, Git, and the X11/GL development stack
+# Prerequisites: CMake ≥ 3.25, Ninja, Git, lcov, and the X11/GL development stack
 sudo apt-get update
 sudo apt-get install -y build-essential cmake ninja-build pkg-config \
     libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
-    libgl1-mesa-dev
+    libgl1-mesa-dev lcov
 
 git clone https://github.com/rathoddinesh14/animforge.git
 cd animforge
