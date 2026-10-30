@@ -13,10 +13,9 @@ aga_add_gl_sample(01_gl_line 01_gl_line)
 aga_add_gl_sample(02_gl_points 02_gl_points)
 
 if(AGA_USE_VULKAN)
-    find_package(Vulkan QUIET)
-    find_program(AGA_GLSLC glslc)
+    find_package(Vulkan QUIET COMPONENTS glslc)
 
-    if(Vulkan_FOUND AND AGA_GLSLC)
+    if(Vulkan_FOUND AND TARGET Vulkan::glslc)
         set(AGA_VK_SHADER_DIR "${CMAKE_CURRENT_BINARY_DIR}/shaders")
         file(MAKE_DIRECTORY "${AGA_VK_SHADER_DIR}")
 
@@ -25,7 +24,7 @@ if(AGA_USE_VULKAN)
 
         add_custom_command(
             OUTPUT "${AGA_VK_VERT_SPV}"
-            COMMAND "${AGA_GLSLC}"
+            COMMAND Vulkan::glslc
                     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/primitive.vert"
                     -o "${AGA_VK_VERT_SPV}"
             DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/primitive.vert"
@@ -34,7 +33,7 @@ if(AGA_USE_VULKAN)
 
         add_custom_command(
             OUTPUT "${AGA_VK_FRAG_SPV}"
-            COMMAND "${AGA_GLSLC}"
+            COMMAND Vulkan::glslc
                     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/primitive.frag"
                     -o "${AGA_VK_FRAG_SPV}"
             DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/shaders/primitive.frag"
@@ -69,7 +68,8 @@ if(AGA_USE_VULKAN)
         aga_add_vk_sample(12_vk_points 12_vk_points)
     else()
         message(WARNING
-            "Vulkan samples disabled: Vulkan SDK and/or glslc was not found."
+            "Vulkan samples disabled: Vulkan SDK headers/library and glslc are required. "
+            "Install the Vulkan SDK and ensure VULKAN_SDK points to its installation."
         )
     endif()
 endif()
