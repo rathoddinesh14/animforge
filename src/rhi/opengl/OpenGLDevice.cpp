@@ -127,35 +127,41 @@ void OpenGLDevice::beginFrame(const math::Vec4& clearColor) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void OpenGLDevice::draw(PrimitiveTopology topology, const float* vertices,
-                        std::size_t vertexCount) {
-    if (!vertices || !isValidVertexCount(topology, vertexCount)) {
+void OpenGLDevice::drawPoints(const float* vertices, std::size_t vertexCount) {
+    if (vertexCount == 0) {
         return;
     }
 
-    GLenum mode = GL_TRIANGLES;
-    switch (topology) {
-    case PrimitiveTopology::PointList:
-        mode = GL_POINTS;
-        if (glPointSize) {
-            glPointSize(12.0f);
-        }
-        break;
-    case PrimitiveTopology::LineList:
-        mode = GL_LINES;
-        break;
-    case PrimitiveTopology::LineStrip:
-        mode = GL_LINE_STRIP;
-        break;
-    case PrimitiveTopology::TriangleList:
-        mode = GL_TRIANGLES;
-        break;
-    case PrimitiveTopology::TriangleStrip:
-        mode = GL_TRIANGLES;
-        break;
+    if (glPointSize) {
+        glPointSize(12.0f);
+    }
+
+    drawVertices(GL_POINTS, vertices, vertexCount);
+}
+
+void OpenGLDevice::drawLines(const float* vertices, std::size_t vertexCount) {
+    if (vertexCount < 2 || vertexCount % 2 != 0) {
+        return;
+    }
+
+    drawVertices(GL_LINES, vertices, vertexCount);
+}
+
+void OpenGLDevice::drawTriangles(const float* vertices, std::size_t vertexCount) {
+    if (vertexCount < 3 || vertexCount % 3 != 0) {
+        return;
+    }
+
+    drawVertices(GL_TRIANGLES, vertices, vertexCount);
+}
+
+void OpenGLDevice::drawVertices(unsigned mode, const float* vertices, std::size_t vertexCount) {
+    if (vertices == nullptr || vertexCount == 0) {
+        return;
     }
 
     const auto byteSize = static_cast<GLsizeiptr>(vertexCount * 7 * sizeof(float));
+
     glUseProgram(m_program);
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);

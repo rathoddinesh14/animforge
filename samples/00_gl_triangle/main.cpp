@@ -3,6 +3,6 @@
 
 int main() {
     return aga::samples::runOpenGLPrimitiveSample("AnimForge - 00 GL Triangle",
-                                                  aga::rhi::PrimitiveTopology::TriangleList,
-                                                  aga::samples::triangleGeometry());
+                                                  aga::samples::triangleGeometry(),
+                                                  &aga::rhi::IDevice::drawTriangles);
 }

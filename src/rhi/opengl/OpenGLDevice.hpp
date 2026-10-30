@@ -15,12 +15,17 @@ public:
 
     void resize(int width, int height) override;
     void beginFrame(const math::Vec4& clearColor) override;
-    void draw(PrimitiveTopology topology, const float* vertices, std::size_t vertexCount) override;
+
+    void drawPoints(const float* vertices, std::size_t vertexCount) override;
+    void drawLines(const float* vertices, std::size_t vertexCount) override;
+    void drawTriangles(const float* vertices, std::size_t vertexCount) override;
+
     void endFrame() override;
 
     [[nodiscard]] std::string_view name() const noexcept override { return "OpenGL"; }
 
 private:
+    void drawVertices(unsigned mode, const float* vertices, std::size_t vertexCount);
     void createPipeline();
     void destroyPipeline();
 
