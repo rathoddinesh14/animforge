@@ -9,7 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 option(AGA_BUILD_SAMPLES "Build sample applications" ON)
 option(AGA_BUILD_TESTS "Build unit tests" ON)
 option(AGA_USE_OPENGL "Enable OpenGL backend" ON)
-option(AGA_USE_VULKAN "Enable Vulkan backend" OFF)
+option(AGA_USE_VULKAN "Enable Vulkan backend" ON)
 option(AGA_ENABLE_COVERAGE "Enable code coverage instrumentation for tests" OFF)
 
 if(AGA_BUILD_TESTS)
