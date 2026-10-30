@@ -16,13 +16,10 @@
 
 namespace aga::samples {
 
-using PrimitiveDrawFunction =
-    void (aga::rhi::IDevice::*)(const float*, std::size_t);
+using PrimitiveDrawFunction = void (aga::rhi::IDevice::*)(const float*, std::size_t);
 
-inline int runOpenGLPrimitiveSample(
-    std::string_view windowTitle,
-    GeometryView geometry,
-    PrimitiveDrawFunction drawFunction) {
+inline int runOpenGLPrimitiveSample(std::string_view windowTitle, GeometryView geometry,
+                                    PrimitiveDrawFunction drawFunction) {
 
     try {
         aga::platform::WindowDesc wdesc;
@@ -36,31 +33,22 @@ inline int runOpenGLPrimitiveSample(
         ddesc.framebufferWidth = window.width();
         ddesc.framebufferHeight = window.height();
 
-        auto device = aga::rhi::createDevice(
-            aga::rhi::Backend::OpenGL,
-            window.handle(),
-            ddesc);
+        auto device = aga::rhi::createDevice(aga::rhi::Backend::OpenGL, window.handle(), ddesc);
 
         if (!device) {
             std::fprintf(stderr, "Failed to create OpenGL device\n");
             return EXIT_FAILURE;
         }
 
-        window.setResizeCallback(
-            [&](int width, int height) {
-                device->resize(width, height);
-            });
+        window.setResizeCallback([&](int width, int height) { device->resize(width, height); });
 
-        std::printf(
-            "Backend: %.*s\n",
-            static_cast<int>(device->name().size()),
-            device->name().data());
+        std::printf("Backend: %.*s\n", static_cast<int>(device->name().size()),
+                    device->name().data());
 
         while (!window.shouldClose()) {
             window.pollEvents();
 
-            device->beginFrame(
-                aga::math::Vec4{0.08f, 0.08f, 0.1f, 1.0f});
+            device->beginFrame(aga::math::Vec4{0.08f, 0.08f, 0.1f, 1.0f});
 
             (device.get()->*drawFunction)(geometry.data, geometry.vertexCount);
 

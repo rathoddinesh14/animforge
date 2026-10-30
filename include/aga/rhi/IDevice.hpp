@@ -33,16 +33,13 @@ public:
     virtual void beginFrame(const math::Vec4& clearColor) = 0;
 
     /// Vertices use the interleaved layout: x y z r g b a.
-    virtual void drawPoints(const float* vertices,
-                            std::size_t vertexCount) = 0;
+    virtual void drawPoints(const float* vertices, std::size_t vertexCount) = 0;
 
     /// Vertices are interpreted as independent pairs.
-    virtual void drawLines(const float* vertices,
-                           std::size_t vertexCount) = 0;
+    virtual void drawLines(const float* vertices, std::size_t vertexCount) = 0;
 
     /// Vertices are interpreted as independent triangles.
-    virtual void drawTriangles(const float* vertices,
-                               std::size_t vertexCount) = 0;
+    virtual void drawTriangles(const float* vertices, std::size_t vertexCount) = 0;
 
     virtual void endFrame() = 0;
 

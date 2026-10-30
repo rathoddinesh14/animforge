@@ -32,8 +32,7 @@ TEST_CASE("Triangle geometry contains three vertices", "[samples][geometry]") {
     REQUIRE(geometry.vertexCount == 3);
 }
 
-TEST_CASE("Sample geometry uses seven floats per vertex",
-          "[samples][geometry]") {
+TEST_CASE("Sample geometry uses seven floats per vertex", "[samples][geometry]") {
     const auto geometry = triangleGeometry();
 
     REQUIRE(geometry.data[0] == Catch::Approx(0.0f));
