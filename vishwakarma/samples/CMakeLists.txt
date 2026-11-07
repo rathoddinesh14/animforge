@@ -1,0 +1,4 @@
+add_executable(vishwakarma_triangle 00_triangle/main.cpp)
+target_include_directories(vishwakarma_triangle PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_link_libraries(vishwakarma_triangle PRIVATE Vishwakarma::Graphics)
+vishwakarma_set_warnings(vishwakarma_triangle)
