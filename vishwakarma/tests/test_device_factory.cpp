@@ -1,20 +1,15 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <vishwakarma/graphics/DeviceFactory.hpp>
+#include <vishwakarma/platform/Window.hpp>
 
-TEST_CASE("Vulkan device creation returns null when backend is unimplemented", "[rhi][factory]") {
-    const vishwakarma::graphics::DeviceDesc desc{};
+#include <stdexcept>
 
-    REQUIRE(vishwakarma::graphics::createDevice(vishwakarma::graphics::Backend::Vulkan, nullptr,
-                                               desc) == nullptr);
+TEST_CASE("Factory rejects an unknown backend explicitly", "[graphics][factory]") {
+    vishwakarma::platform::Window window(
+        vishwakarma::platform::WindowDesc{320, 240, "factory", false});
+    const auto invalidBackend = static_cast<vishwakarma::graphics::Backend>(255);
+
+    REQUIRE_THROWS_AS(vishwakarma::graphics::createDevice(invalidBackend, window),
+                      std::invalid_argument);
 }
-
-#ifdef VISHWAKARMA_USE_OPENGL
-TEST_CASE("OpenGL device creation rejects a null window", "[rhi][factory][opengl]") {
-    const vishwakarma::graphics::DeviceDesc desc{};
-
-    REQUIRE_THROWS_AS(vishwakarma::graphics::createDevice(
-                          vishwakarma::graphics::Backend::OpenGL, nullptr, desc),
-                      std::runtime_error);
-}
-#endif

@@ -1,9 +1,16 @@
 #pragma once
 
 #include <functional>
+#include <memory>
 #include <string>
 
-struct GLFWwindow;
+namespace vishwakarma::platform::detail {
+struct WindowState;
+}
+
+namespace vishwakarma::graphics::detail {
+struct WindowAccess;
+}
 
 namespace vishwakarma::platform {
 
@@ -12,35 +19,36 @@ struct WindowDesc {
     int height = 720;
     std::string title = "Vishwakarma";
     bool resizable = true;
+    bool debugContext = false;
 };
 
-/// GLFW window and OpenGL context.
+/// Owns a GLFW window and its OpenGL context.
+///
+/// All windows and devices must be created, used, and destroyed on the thread
+/// that creates the first GLFW window (normally the application main thread).
 class Window {
 public:
     explicit Window(const WindowDesc& desc);
-    ~Window();
+    ~Window() noexcept;
 
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
 
-    [[nodiscard]] GLFWwindow* handle() const noexcept { return m_window; }
     [[nodiscard]] bool shouldClose() const;
     void pollEvents();
     void swapBuffers();
 
-    [[nodiscard]] int width() const noexcept { return m_width; }
-    [[nodiscard]] int height() const noexcept { return m_height; }
+    [[nodiscard]] int width() const;
+    [[nodiscard]] int height() const;
 
     using ResizeCallback = std::function<void(int, int)>;
     void setResizeCallback(ResizeCallback cb);
+    void setSize(int width, int height);
 
 private:
-    static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+    friend struct ::vishwakarma::graphics::detail::WindowAccess;
 
-    GLFWwindow* m_window = nullptr;
-    int m_width = 0;
-    int m_height = 0;
-    ResizeCallback m_resizeCallback;
+    std::shared_ptr<detail::WindowState> m_state;
 };
 
 } // namespace vishwakarma::platform

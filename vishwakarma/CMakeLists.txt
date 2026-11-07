@@ -12,6 +12,7 @@ include(cmake/Dependencies.cmake)
 include(cmake/CompilerWarnings.cmake)
 
 find_package(OpenGL REQUIRED)
+find_package(Threads REQUIRED)
 vishwakarma_resolve_glfw()
 
 add_library(vishwakarma_graphics STATIC
@@ -28,9 +29,10 @@ target_include_directories(vishwakarma_graphics
         $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(vishwakarma_graphics
-    PUBLIC
+    PRIVATE
         ${VISHWAKARMA_GLFW_TARGET}
         OpenGL::GL
+        Threads::Threads
 )
 target_compile_definitions(vishwakarma_graphics PRIVATE GLFW_INCLUDE_NONE=1)
 vishwakarma_set_warnings(vishwakarma_graphics)

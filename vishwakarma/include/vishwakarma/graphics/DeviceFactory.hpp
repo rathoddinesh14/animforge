@@ -2,19 +2,17 @@
 
 #include <vishwakarma/graphics/IDevice.hpp>
 #include <vishwakarma/graphics/Types.hpp>
+#include <vishwakarma/platform/Window.hpp>
 
 #include <memory>
-
-struct GLFWwindow; // opaque; platform owns the window
 
 namespace vishwakarma::graphics {
 
 /**
- * Create a graphics device for the given backend, bound to an existing GLFW window.
- * @return nullptr if the requested backend is not implemented. Initialization
- *         failures from an implemented backend are reported with exceptions.
+ * Create an OpenGL device for an existing window. The device retains the
+ * window's private lifetime state, so it may safely outlive the Window object.
+ * Initialization failures are reported with exceptions.
  */
-[[nodiscard]] std::unique_ptr<IDevice> createDevice(Backend backend, GLFWwindow* window,
-                                                    const DeviceDesc& desc);
+[[nodiscard]] std::unique_ptr<IDevice> createDevice(Backend backend, platform::Window& window);
 
 } // namespace vishwakarma::graphics

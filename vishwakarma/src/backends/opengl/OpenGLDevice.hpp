@@ -1,15 +1,23 @@
 #pragma once
 
 #include <vishwakarma/graphics/IDevice.hpp>
+#include <vishwakarma/platform/Window.hpp>
 
-struct GLFWwindow;
+#include "GlLoader.hpp"
+
+#include <memory>
+#include <thread>
+
+namespace vishwakarma::platform::detail {
+struct WindowState;
+}
 
 namespace vishwakarma::graphics {
 
 class OpenGLDevice final : public IDevice {
 public:
-    OpenGLDevice(GLFWwindow* window, const DeviceDesc& desc);
-    ~OpenGLDevice() override;
+    explicit OpenGLDevice(std::shared_ptr<platform::detail::WindowState> windowState);
+    ~OpenGLDevice() noexcept override;
 
     [[nodiscard]] Backend backend() const noexcept override { return Backend::OpenGL; }
 
@@ -25,13 +33,17 @@ public:
     [[nodiscard]] std::string_view name() const noexcept override { return "OpenGL"; }
 
 private:
+    void makeContextCurrent() const;
     void drawVertices(unsigned mode, const float* vertices, std::size_t vertexCount);
     void createPipeline();
-    void destroyPipeline();
+    void destroyPipeline() noexcept;
 
-    GLFWwindow* m_window = nullptr;
+    std::shared_ptr<platform::detail::WindowState> m_windowState;
+    std::thread::id m_ownerThread;
+    GLFunctions m_gl;
     int m_width = 0;
     int m_height = 0;
+    bool m_glLoaded = false;
 
     unsigned m_program = 0;
     unsigned m_vao = 0;

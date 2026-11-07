@@ -13,7 +13,7 @@ namespace vishwakarma::graphics {
  * Samples pass CPU vertex data (pos + color). Backends upload and draw with the
  * requested topology. This is intentionally not a full engine RHI.
  *
- * Public headers must not include GL or Vulkan headers.
+ * The public contract does not expose GLFW or OpenGL types.
  */
 class IDevice {
 public:
@@ -28,7 +28,7 @@ public:
 
     virtual void resize(int width, int height) = 0;
 
-    /// Begin a frame; @p clearColor is linear RGBA in [0,1] (stored as xyzw).
+    /// Begin a frame; @p clearColor is linear RGBA with components in [0,1].
     virtual void beginFrame(const Color& clearColor) = 0;
 
     /// Vertices use the interleaved layout: x y z r g b a.

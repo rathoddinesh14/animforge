@@ -5,8 +5,13 @@ add_executable(vishwakarma_tests
     test_draw_validation.cpp
     test_rhi_types.cpp
     test_geometry.cpp
+    test_window_lifecycle.cpp
+    test_gl_loader.cpp
 )
-target_include_directories(vishwakarma_tests PRIVATE "${CMAKE_SOURCE_DIR}/samples")
+target_include_directories(vishwakarma_tests PRIVATE
+    "${PROJECT_SOURCE_DIR}/samples"
+    "${PROJECT_SOURCE_DIR}/src/backends/opengl"
+)
 target_link_libraries(vishwakarma_tests PRIVATE
     Vishwakarma::Graphics
     Catch2::Catch2WithMain

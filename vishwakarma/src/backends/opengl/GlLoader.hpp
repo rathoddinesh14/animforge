@@ -1,8 +1,7 @@
 #pragma once
 
-// Minimal GL 4.5 core loader for Vishwakarma samples.
+// Minimal GL 4.5 core loader for Vishwakarma.
 // Loads only the entry points OpenGLDevice needs via glfwGetProcAddress.
-// Avoids glad2 (Python/jinja2) complexity in CI.
 
 #include <cstddef>
 #include <cstdint>
@@ -29,6 +28,7 @@ constexpr GLenum GL_FLOAT = 0x1406;
 constexpr GLenum GL_FALSE = 0;
 constexpr GLenum GL_COMPILE_STATUS = 0x8B81;
 constexpr GLenum GL_LINK_STATUS = 0x8B82;
+constexpr GLenum GL_INFO_LOG_LENGTH = 0x8B84;
 constexpr GLenum GL_VERTEX_SHADER = 0x8B31;
 constexpr GLenum GL_FRAGMENT_SHADER = 0x8B30;
 
@@ -61,35 +61,37 @@ using PFNGLGETPROGRAMINFOLOGPROC = void (*)(GLuint, GLsizei, GLsizei*, GLchar*);
 using PFNGLDELETEPROGRAMPROC = void (*)(GLuint);
 using PFNGLUSEPROGRAMPROC = void (*)(GLuint);
 
-extern PFNGLCLEARCOLORPROC glClearColor;
-extern PFNGLCLEARPROC glClear;
-extern PFNGLVIEWPORTPROC glViewport;
-extern PFNGLDRAWARRAYSPROC glDrawArrays;
-extern PFNGLPOINTSIZEPROC glPointSize;
-extern PFNGLGENBUFFERSPROC glGenBuffers;
-extern PFNGLBINDBUFFERPROC glBindBuffer;
-extern PFNGLBUFFERDATAPROC glBufferData;
-extern PFNGLDELETEBUFFERSPROC glDeleteBuffers;
-extern PFNGLGENVERTEXARRAYSPROC glGenVertexArrays;
-extern PFNGLBINDVERTEXARRAYPROC glBindVertexArray;
-extern PFNGLDELETEVERTEXARRAYSPROC glDeleteVertexArrays;
-extern PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray;
-extern PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer;
-extern PFNGLCREATESHADERPROC glCreateShader;
-extern PFNGLSHADERSOURCEPROC glShaderSource;
-extern PFNGLCOMPILESHADERPROC glCompileShader;
-extern PFNGLGETSHADERIVPROC glGetShaderiv;
-extern PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog;
-extern PFNGLDELETESHADERPROC glDeleteShader;
-extern PFNGLCREATEPROGRAMPROC glCreateProgram;
-extern PFNGLATTACHSHADERPROC glAttachShader;
-extern PFNGLLINKPROGRAMPROC glLinkProgram;
-extern PFNGLGETPROGRAMIVPROC glGetProgramiv;
-extern PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog;
-extern PFNGLDELETEPROGRAMPROC glDeleteProgram;
-extern PFNGLUSEPROGRAMPROC glUseProgram;
+struct GLFunctions {
+    PFNGLCLEARCOLORPROC clearColor = nullptr;
+    PFNGLCLEARPROC clear = nullptr;
+    PFNGLVIEWPORTPROC viewport = nullptr;
+    PFNGLDRAWARRAYSPROC drawArrays = nullptr;
+    PFNGLPOINTSIZEPROC pointSize = nullptr;
+    PFNGLGENBUFFERSPROC genBuffers = nullptr;
+    PFNGLBINDBUFFERPROC bindBuffer = nullptr;
+    PFNGLBUFFERDATAPROC bufferData = nullptr;
+    PFNGLDELETEBUFFERSPROC deleteBuffers = nullptr;
+    PFNGLGENVERTEXARRAYSPROC genVertexArrays = nullptr;
+    PFNGLBINDVERTEXARRAYPROC bindVertexArray = nullptr;
+    PFNGLDELETEVERTEXARRAYSPROC deleteVertexArrays = nullptr;
+    PFNGLENABLEVERTEXATTRIBARRAYPROC enableVertexAttribArray = nullptr;
+    PFNGLVERTEXATTRIBPOINTERPROC vertexAttribPointer = nullptr;
+    PFNGLCREATESHADERPROC createShader = nullptr;
+    PFNGLSHADERSOURCEPROC shaderSource = nullptr;
+    PFNGLCOMPILESHADERPROC compileShader = nullptr;
+    PFNGLGETSHADERIVPROC getShaderiv = nullptr;
+    PFNGLGETSHADERINFOLOGPROC getShaderInfoLog = nullptr;
+    PFNGLDELETESHADERPROC deleteShader = nullptr;
+    PFNGLCREATEPROGRAMPROC createProgram = nullptr;
+    PFNGLATTACHSHADERPROC attachShader = nullptr;
+    PFNGLLINKPROGRAMPROC linkProgram = nullptr;
+    PFNGLGETPROGRAMIVPROC getProgramiv = nullptr;
+    PFNGLGETPROGRAMINFOLOGPROC getProgramInfoLog = nullptr;
+    PFNGLDELETEPROGRAMPROC deleteProgram = nullptr;
+    PFNGLUSEPROGRAMPROC useProgram = nullptr;
+};
 
-using GLProcAddress = void* (*)(const char* name);
+using GLProcAddress = void (*(*)(const char* name))();
 
-/// Load required GL entry points. @return false if any critical symbol is missing.
-bool loadGl(GLProcAddress load);
+/// Load required entry points or throw with the names of missing functions.
+[[nodiscard]] GLFunctions loadGl(GLProcAddress load);

@@ -1,71 +1,64 @@
 #include "GlLoader.hpp"
 
-PFNGLCLEARCOLORPROC glClearColor = nullptr;
-PFNGLCLEARPROC glClear = nullptr;
-PFNGLVIEWPORTPROC glViewport = nullptr;
-PFNGLDRAWARRAYSPROC glDrawArrays = nullptr;
-PFNGLPOINTSIZEPROC glPointSize = nullptr;
-PFNGLGENBUFFERSPROC glGenBuffers = nullptr;
-PFNGLBINDBUFFERPROC glBindBuffer = nullptr;
-PFNGLBUFFERDATAPROC glBufferData = nullptr;
-PFNGLDELETEBUFFERSPROC glDeleteBuffers = nullptr;
-PFNGLGENVERTEXARRAYSPROC glGenVertexArrays = nullptr;
-PFNGLBINDVERTEXARRAYPROC glBindVertexArray = nullptr;
-PFNGLDELETEVERTEXARRAYSPROC glDeleteVertexArrays = nullptr;
-PFNGLENABLEVERTEXATTRIBARRAYPROC glEnableVertexAttribArray = nullptr;
-PFNGLVERTEXATTRIBPOINTERPROC glVertexAttribPointer = nullptr;
-PFNGLCREATESHADERPROC glCreateShader = nullptr;
-PFNGLSHADERSOURCEPROC glShaderSource = nullptr;
-PFNGLCOMPILESHADERPROC glCompileShader = nullptr;
-PFNGLGETSHADERIVPROC glGetShaderiv = nullptr;
-PFNGLGETSHADERINFOLOGPROC glGetShaderInfoLog = nullptr;
-PFNGLDELETESHADERPROC glDeleteShader = nullptr;
-PFNGLCREATEPROGRAMPROC glCreateProgram = nullptr;
-PFNGLATTACHSHADERPROC glAttachShader = nullptr;
-PFNGLLINKPROGRAMPROC glLinkProgram = nullptr;
-PFNGLGETPROGRAMIVPROC glGetProgramiv = nullptr;
-PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog = nullptr;
-PFNGLDELETEPROGRAMPROC glDeleteProgram = nullptr;
-PFNGLUSEPROGRAMPROC glUseProgram = nullptr;
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 namespace {
 
 template <typename T>
-bool loadProc(T& fn, GLProcAddress load, const char* name) {
-    fn = reinterpret_cast<T>(load(name));
-    return fn != nullptr;
+void loadProc(T& function, GLProcAddress resolver, const char* name,
+              std::vector<std::string>& missing) {
+    function = reinterpret_cast<T>(resolver(name));
+    if (!function) {
+        missing.emplace_back(name);
+    }
 }
 
 } // namespace
 
-bool loadGl(GLProcAddress load) {
-    bool ok = true;
-    ok = loadProc(glClearColor, load, "glClearColor") && ok;
-    ok = loadProc(glClear, load, "glClear") && ok;
-    ok = loadProc(glViewport, load, "glViewport") && ok;
-    ok = loadProc(glDrawArrays, load, "glDrawArrays") && ok;
-    ok = loadProc(glPointSize, load, "glPointSize") && ok;
-    ok = loadProc(glGenBuffers, load, "glGenBuffers") && ok;
-    ok = loadProc(glBindBuffer, load, "glBindBuffer") && ok;
-    ok = loadProc(glBufferData, load, "glBufferData") && ok;
-    ok = loadProc(glDeleteBuffers, load, "glDeleteBuffers") && ok;
-    ok = loadProc(glGenVertexArrays, load, "glGenVertexArrays") && ok;
-    ok = loadProc(glBindVertexArray, load, "glBindVertexArray") && ok;
-    ok = loadProc(glDeleteVertexArrays, load, "glDeleteVertexArrays") && ok;
-    ok = loadProc(glEnableVertexAttribArray, load, "glEnableVertexAttribArray") && ok;
-    ok = loadProc(glVertexAttribPointer, load, "glVertexAttribPointer") && ok;
-    ok = loadProc(glCreateShader, load, "glCreateShader") && ok;
-    ok = loadProc(glShaderSource, load, "glShaderSource") && ok;
-    ok = loadProc(glCompileShader, load, "glCompileShader") && ok;
-    ok = loadProc(glGetShaderiv, load, "glGetShaderiv") && ok;
-    ok = loadProc(glGetShaderInfoLog, load, "glGetShaderInfoLog") && ok;
-    ok = loadProc(glDeleteShader, load, "glDeleteShader") && ok;
-    ok = loadProc(glCreateProgram, load, "glCreateProgram") && ok;
-    ok = loadProc(glAttachShader, load, "glAttachShader") && ok;
-    ok = loadProc(glLinkProgram, load, "glLinkProgram") && ok;
-    ok = loadProc(glGetProgramiv, load, "glGetProgramiv") && ok;
-    ok = loadProc(glGetProgramInfoLog, load, "glGetProgramInfoLog") && ok;
-    ok = loadProc(glDeleteProgram, load, "glDeleteProgram") && ok;
-    ok = loadProc(glUseProgram, load, "glUseProgram") && ok;
-    return ok;
+GLFunctions loadGl(GLProcAddress resolver) {
+    if (!resolver) {
+        throw std::invalid_argument("OpenGL function loader received a null resolver");
+    }
+
+    GLFunctions functions;
+    std::vector<std::string> missing;
+    loadProc(functions.clearColor, resolver, "glClearColor", missing);
+    loadProc(functions.clear, resolver, "glClear", missing);
+    loadProc(functions.viewport, resolver, "glViewport", missing);
+    loadProc(functions.drawArrays, resolver, "glDrawArrays", missing);
+    loadProc(functions.pointSize, resolver, "glPointSize", missing);
+    loadProc(functions.genBuffers, resolver, "glGenBuffers", missing);
+    loadProc(functions.bindBuffer, resolver, "glBindBuffer", missing);
+    loadProc(functions.bufferData, resolver, "glBufferData", missing);
+    loadProc(functions.deleteBuffers, resolver, "glDeleteBuffers", missing);
+    loadProc(functions.genVertexArrays, resolver, "glGenVertexArrays", missing);
+    loadProc(functions.bindVertexArray, resolver, "glBindVertexArray", missing);
+    loadProc(functions.deleteVertexArrays, resolver, "glDeleteVertexArrays", missing);
+    loadProc(functions.enableVertexAttribArray, resolver, "glEnableVertexAttribArray", missing);
+    loadProc(functions.vertexAttribPointer, resolver, "glVertexAttribPointer", missing);
+    loadProc(functions.createShader, resolver, "glCreateShader", missing);
+    loadProc(functions.shaderSource, resolver, "glShaderSource", missing);
+    loadProc(functions.compileShader, resolver, "glCompileShader", missing);
+    loadProc(functions.getShaderiv, resolver, "glGetShaderiv", missing);
+    loadProc(functions.getShaderInfoLog, resolver, "glGetShaderInfoLog", missing);
+    loadProc(functions.deleteShader, resolver, "glDeleteShader", missing);
+    loadProc(functions.createProgram, resolver, "glCreateProgram", missing);
+    loadProc(functions.attachShader, resolver, "glAttachShader", missing);
+    loadProc(functions.linkProgram, resolver, "glLinkProgram", missing);
+    loadProc(functions.getProgramiv, resolver, "glGetProgramiv", missing);
+    loadProc(functions.getProgramInfoLog, resolver, "glGetProgramInfoLog", missing);
+    loadProc(functions.deleteProgram, resolver, "glDeleteProgram", missing);
+    loadProc(functions.useProgram, resolver, "glUseProgram", missing);
+
+    if (!missing.empty()) {
+        std::string message = "Missing required OpenGL entry points:";
+        for (const auto& name : missing) {
+            message += "\n  ";
+            message += name;
+        }
+        throw std::runtime_error(message);
+    }
+    return functions;
 }

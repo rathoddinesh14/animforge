@@ -8,7 +8,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <exception>
-#include <functional>
 #include <string>
 #include <string_view>
 
@@ -19,7 +18,8 @@ namespace vishwakarma::samples {
 using PrimitiveDrawFunction = void (vishwakarma::graphics::IDevice::*)(const float*, std::size_t);
 
 inline int runOpenGLPrimitiveSample(std::string_view windowTitle, GeometryView geometry,
-                                    PrimitiveDrawFunction drawFunction) {
+                                    PrimitiveDrawFunction drawFunction,
+                                    std::size_t maxFrames = 0) {
 
     try {
         vishwakarma::platform::WindowDesc wdesc;
@@ -29,24 +29,16 @@ inline int runOpenGLPrimitiveSample(std::string_view windowTitle, GeometryView g
 
         vishwakarma::platform::Window window(wdesc);
 
-        vishwakarma::graphics::DeviceDesc ddesc;
-        ddesc.framebufferWidth = window.width();
-        ddesc.framebufferHeight = window.height();
-
         auto device = vishwakarma::graphics::createDevice(
-            vishwakarma::graphics::Backend::OpenGL, window.handle(), ddesc);
-
-        if (!device) {
-            std::fprintf(stderr, "Failed to create OpenGL device\n");
-            return EXIT_FAILURE;
-        }
+            vishwakarma::graphics::Backend::OpenGL, window);
 
         window.setResizeCallback([&](int width, int height) { device->resize(width, height); });
 
         std::printf("Backend: %.*s\n", static_cast<int>(device->name().size()),
                     device->name().data());
 
-        while (!window.shouldClose()) {
+        std::size_t renderedFrames = 0;
+        while (!window.shouldClose() && (maxFrames == 0 || renderedFrames < maxFrames)) {
             window.pollEvents();
 
             device->beginFrame(vishwakarma::graphics::Color{0.08f, 0.08f, 0.1f, 1.0f});
@@ -55,6 +47,7 @@ inline int runOpenGLPrimitiveSample(std::string_view windowTitle, GeometryView g
 
             device->endFrame();
             window.swapBuffers();
+            ++renderedFrames;
         }
     } catch (const std::exception& ex) {
         std::fprintf(stderr, "Fatal: %s\n", ex.what());
