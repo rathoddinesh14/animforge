@@ -15,7 +15,8 @@
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
         "AGA_BUILD_SAMPLES": "ON",
-        "AGA_BUILD_TESTS": "ON"
+        "AGA_BUILD_TESTS": "ON",
+        "AGA_USE_VULKAN": "ON"
       }
     },
     {
@@ -26,7 +27,9 @@
       "cacheVariables": {
         "AGA_BUILD_SAMPLES": "ON",
         "AGA_BUILD_TESTS": "ON",
-        "CMAKE_CXX_COMPILER": "cl"
+        "AGA_USE_VULKAN": "ON",
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
@@ -38,6 +41,7 @@
       "cacheVariables": {
         "AGA_BUILD_SAMPLES": "ON",
         "AGA_BUILD_TESTS": "ON",
+        "AGA_USE_VULKAN": "ON",
         "CMAKE_BUILD_TYPE": "Debug"
       }
     },
@@ -50,6 +54,7 @@
       "cacheVariables": {
         "AGA_BUILD_SAMPLES": "ON",
         "AGA_BUILD_TESTS": "ON",
+        "AGA_USE_VULKAN": "ON",
         "AGA_ENABLE_COVERAGE": "ON",
         "CMAKE_BUILD_TYPE": "Debug"
       }
@@ -60,6 +65,10 @@
       "name": "windows-msvc-debug",
       "configurePreset": "windows-msvc",
       "configuration": "Debug"
+    },
+    {
+      "name": "windows-msvc-ninja",
+      "configurePreset": "windows-msvc-ninja"
     },
     {
       "name": "windows-msvc-release",
