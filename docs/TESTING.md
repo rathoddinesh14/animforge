@@ -92,8 +92,13 @@ Every skinning and IK change must also be validated in the sample viewer.
 | Area | File |
 |------|------|
 | Math / GLM conventions | `tests/math/test_glm_integration.cpp` |
-| RHI enums | `tests/rhi/test_rhi_types.cpp` |
-| Draw topology validation | `tests/rhi/test_draw_validation.cpp` |
 | Sample geometry | `tests/samples/test_geometry.cpp` |
+| Vishwakarma OpenGL integration | `tests/graphics/test_vishwakarma_integration.cpp` |
 
-GPU samples are not run in CI (no display). They must build when `AGA_BUILD_SAMPLES=ON`.
+The OpenGL integration test and samples require a display. For headless Linux
+validation, run CTest and the bounded OpenGL samples under Xvfb, for example:
+
+```bash
+xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 ctest --test-dir build --output-on-failure
+xvfb-run -a env LIBGL_ALWAYS_SOFTWARE=1 build/samples/aga_sample_00_gl_triangle --frames 1
+```

@@ -5,12 +5,14 @@ function(aga_add_gl_sample name dir)
         "${CMAKE_CURRENT_SOURCE_DIR}"
     )
 
-    target_link_libraries(aga_sample_${name} PRIVATE aga_core)
+    target_link_libraries(aga_sample_${name} PRIVATE Vishwakarma::Graphics)
 endfunction()
 
-aga_add_gl_sample(00_gl_triangle 00_gl_triangle)
-aga_add_gl_sample(01_gl_line 01_gl_line)
-aga_add_gl_sample(02_gl_points 02_gl_points)
+if(AGA_USE_OPENGL)
+    aga_add_gl_sample(00_gl_triangle 00_gl_triangle)
+    aga_add_gl_sample(01_gl_line 01_gl_line)
+    aga_add_gl_sample(02_gl_points 02_gl_points)
+endif()
 
 if(AGA_USE_VULKAN)
     find_package(Vulkan QUIET COMPONENTS glslc)

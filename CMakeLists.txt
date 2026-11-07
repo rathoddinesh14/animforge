@@ -8,8 +8,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Options
 option(AGA_BUILD_SAMPLES "Build sample applications" ON)
 option(AGA_BUILD_TESTS "Build unit tests" ON)
-option(AGA_USE_OPENGL "Enable OpenGL backend" ON)
-option(AGA_USE_VULKAN "Enable Vulkan backend" ON)
+option(AGA_USE_OPENGL "Build OpenGL samples and tests through Vishwakarma" ON)
+option(AGA_USE_VULKAN "Build Vulkan-specific samples" ON)
 option(AGA_ENABLE_COVERAGE "Enable code coverage instrumentation for tests" OFF)
 
 if(AGA_BUILD_TESTS)
@@ -47,31 +47,25 @@ target_sources(aga_core PRIVATE
     src/math/math_dummy.cpp
 )
 
-# OpenGL RHI + platform (window)
-if(AGA_USE_OPENGL)
-    target_sources(aga_core PRIVATE
-        src/platform/Window.cpp
-        src/rhi/DeviceFactory.cpp
-        src/rhi/opengl/OpenGLDevice.cpp
-        src/rhi/opengl/GlLoader.cpp
+# Vulkan samples use GLFW directly. OpenGL infrastructure is provided by
+# Vishwakarma and is fetched only when the OpenGL consumers are enabled.
+if(AGA_USE_OPENGL AND (AGA_BUILD_SAMPLES OR AGA_BUILD_TESTS))
+    include(FetchContent)
+    set(VISHWAKARMA_BUILD_SAMPLES OFF CACHE BOOL "" FORCE)
+    set(VISHWAKARMA_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    FetchContent_Declare(
+        vishwakarma
+        GIT_REPOSITORY https://github.com/rathoddinesh14/vishwakarma.git
+        GIT_TAG        2b5f2f8a156f669552a60973ea9ab1a15c47ff97
+        GIT_SHALLOW    FALSE
     )
-    target_link_libraries(aga_core
-        PUBLIC
-            glfw
-    )
-    # Linux needs explicit OpenGL library for glfw apps
-    find_package(OpenGL QUIET)
-    if(OpenGL_FOUND)
-        target_link_libraries(aga_core PUBLIC OpenGL::GL)
-    endif()
-    target_compile_definitions(aga_core PUBLIC AGA_USE_OPENGL=1 GLFW_INCLUDE_NONE=1)
-    target_include_directories(aga_core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+    FetchContent_MakeAvailable(vishwakarma)
 endif()
 
 # Samples
 if(AGA_BUILD_SAMPLES)
-    if(NOT AGA_USE_OPENGL)
-        message(WARNING "AGA_BUILD_SAMPLES is ON but AGA_USE_OPENGL is OFF - samples may not link")
+    if(NOT AGA_USE_OPENGL AND NOT AGA_USE_VULKAN)
+        message(WARNING "AGA_BUILD_SAMPLES is ON but both graphics sample options are OFF")
     endif()
     add_subdirectory(samples)
 endif()

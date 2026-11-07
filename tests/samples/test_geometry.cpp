@@ -4,9 +4,6 @@
 
 #include "common/Geometry.hpp"
 
-#include <aga/rhi/DrawValidation.hpp>
-
-using aga::rhi::kVertexFloats;
 using aga::samples::lineGeometry;
 using aga::samples::pointGeometry;
 using aga::samples::triangleGeometry;
@@ -38,5 +35,5 @@ TEST_CASE("Sample geometry uses seven floats per vertex", "[samples][geometry]")
     REQUIRE(geometry.data[0] == Catch::Approx(0.0f));
     REQUIRE(geometry.data[1] == Catch::Approx(0.5f));
     REQUIRE(geometry.data[3] == Catch::Approx(1.0f));
-    REQUIRE(kVertexFloats * geometry.vertexCount == 21);
+    REQUIRE(geometry.vertexCount * 7 == 21);
 }

@@ -81,7 +81,7 @@ printf '%s\n' "$files" | xargs clang-format-17 -i
 | [docs/ASSET_PIPELINE.md](docs/ASSET_PIPELINE.md) | Expected asset formats and conversion |
 | [docs/TESTING.md](docs/TESTING.md) | TDD workflow and Catch2 usage |
 | [docs/CODING_STANDARDS.md](docs/CODING_STANDARDS.md) | Naming, style, documentation, ownership |
-| [docs/OPENGL_FUNCTION_POINTERS.md](docs/OPENGL_FUNCTION_POINTERS.md) | PFNGL loaders, GLFW_INCLUDE_NONE, GlLoader |
+| [docs/VISHWAKARMA_INTEGRATION.md](docs/VISHWAKARMA_INTEGRATION.md) | Pinned graphics dependency and integration |
 
 ## License
 
