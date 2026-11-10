@@ -67,15 +67,19 @@ This applies especially to: math types, pose evaluation, blending, IK solvers, a
 Visual regression via the sample viewer remains essential for skinning and rendering artefacts that pure unit tests cannot catch.
 
 ## 11. Render Hardware Interface (RHI)
-**Choice**: Runtime-swappable backend via factory + virtual `IDevice` (`aga::rhi`). OpenGL first; Vulkan second. GLFW for windowing/input on all platforms.
+**Choice**: Use the pinned `Vishwakarma::Graphics` dependency for GLFW
+window/context management and the OpenGL device API. Keep Vulkan-specific
+sample code in AnimForge until Vulkan support is independently designed.
 **Rationale**:
-- Animation and debug code must not depend on GL or Vulkan headers.
-- Runtime switch enables A/B comparison and a single sample binary.
-- Vulkan-shaped contracts (explicit resources, command recording mindset) even when the first implementation is OpenGL.
-- GLFW is the de-facto portable window/context layer for both APIs.
+- Animation algorithms do not own windowing, context, or OpenGL loader code.
+- The graphics foundation evolves and is validated in its own repository.
+- AnimForge retains only domain-specific animation/rendering and its
+  Vulkan-specific sample implementation.
 
-**First milestone**: Educational samples that draw point, line, and triangle on OpenGL, then Vulkan.
-**Not first**: Production DebugDraw system or full retained mesh engine.
+**First milestone**: Consume a pinned Vishwakarma revision from OpenGL samples
+and test the public integration.
+**Not first**: Duplicate a second renderer or migrate Vulkan as part of this
+change.
 
 ## Open Questions (to be decided later)
 - Exact animation compression format.

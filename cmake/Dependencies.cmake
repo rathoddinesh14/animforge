@@ -44,9 +44,9 @@ if(AGA_BUILD_TESTS)
 endif()
 
 # ---------------------------------------------------------------------------
-# GLFW + GLAD (OpenGL samples / RHI)
+# GLFW (Vulkan samples only; the OpenGL dependency is resolved by Vishwakarma)
 # ---------------------------------------------------------------------------
-if(AGA_USE_OPENGL OR AGA_BUILD_SAMPLES)
+if(AGA_USE_VULKAN AND AGA_BUILD_SAMPLES)
     if(UNIX AND NOT APPLE)
         find_package(X11 REQUIRED COMPONENTS Xrandr Xinerama Xi Xcursor)
     endif()

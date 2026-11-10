@@ -3,11 +3,12 @@
 add_executable(aga_tests
     math/test_glm_integration.cpp
     math/test_math_helpers.cpp
-    rhi/test_rhi_types.cpp
-    rhi/test_draw_validation.cpp
-    rhi/test_device_factory.cpp
     samples/test_geometry.cpp
 )
+
+if(AGA_USE_OPENGL)
+    target_sources(aga_tests PRIVATE graphics/test_vishwakarma_integration.cpp)
+endif()
 
 target_link_libraries(aga_tests
     PRIVATE
@@ -15,6 +16,10 @@ target_link_libraries(aga_tests
         Catch2::Catch2WithMain
         glm::glm
 )
+
+if(AGA_USE_OPENGL)
+    target_link_libraries(aga_tests PRIVATE Vishwakarma::Graphics)
+endif()
 
 target_include_directories(aga_tests
     PRIVATE

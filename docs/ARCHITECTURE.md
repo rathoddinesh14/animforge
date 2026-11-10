@@ -47,21 +47,25 @@
 - `IKSolver` family.
 - `RootMotionExtractor`.
 
-### 3. `aga::rhi` (Render Hardware Interface)
-- Runtime-swappable backends (`Backend::OpenGL`, `Backend::Vulkan`).
-- `IDevice` — clear, draw triangle lists, present coordination.
-- OpenGL implementation first; Vulkan later.
-- Public headers never include GL/Vulkan.
+### 3. Vishwakarma graphics foundation
+- AnimForge consumes the pinned `Vishwakarma::Graphics` dependency for GLFW
+  window/context ownership and the OpenGL device API.
+- OpenGL samples depend on Vishwakarma rather than carrying a local loader,
+  window implementation, or graphics device.
+- Vulkan remains application/sample-specific until a separate backend
+  migration is planned.
 
 ### 4. `aga::debug` (planned)
 - `DebugDraw` batches points/lines/triangles for skeleton visualization.
 
-### 5. `aga::platform`
-- GLFW window + context (OpenGL path); Vulkan surface later.
-- Input and timing.
+### 5. Platform integration
+- OpenGL sample window/context lifecycle is owned by Vishwakarma.
+- Vulkan samples currently manage their own GLFW no-API window.
+- Animation evaluation remains independent of either windowing path.
 
 ### 6. `aga::rendering` (planned)
-- Skinning backends on top of RHI.
+- Skinning and animation-specific rendering will consume graphics services
+  without duplicating Vishwakarma's platform or OpenGL infrastructure.
 
 ### 5. `aga::core`
 - Logging, assertions, memory arenas (optional), timing.
