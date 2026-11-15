@@ -53,8 +53,7 @@ std::shared_ptr<spdlog::logger> makeLogger(const aga::log::Config& config) {
         sinks.push_back(std::make_shared<spdlog::sinks::null_sink_mt>());
     }
 
-    auto logger = std::make_shared<spdlog::logger>(
-        "animforge", sinks.begin(), sinks.end());
+    auto logger = std::make_shared<spdlog::logger>("animforge", sinks.begin(), sinks.end());
 
     logger->set_level(toSpdlogLevel(config.level));
     logger->set_pattern(config.pattern);
@@ -101,10 +100,7 @@ void flush() {
 
 namespace detail {
 
-void write(Level level,
-           std::string_view message,
-           const char* file,
-           int line,
+void write(Level level, std::string_view message, const char* file, int line,
            const char* function) {
     const auto logger = getLogger();
     if (!logger) {
@@ -112,9 +108,7 @@ void write(Level level,
     }
 
     const spdlog::source_loc sourceLocation{file, line, function};
-    logger->log(sourceLocation,
-                toSpdlogLevel(level),
-                "{}",
+    logger->log(sourceLocation, toSpdlogLevel(level), "{}",
                 spdlog::string_view_t{message.data(), message.size()});
 }
 

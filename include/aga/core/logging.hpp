@@ -14,15 +14,7 @@ namespace aga::log {
  *
  * This enum is intentionally independent of any logging backend.
  */
-enum class Level {
-    trace,
-    debug,
-    info,
-    warn,
-    error,
-    critical,
-    off
-};
+enum class Level { trace, debug, info, warn, error, critical, off };
 
 /**
  * Backend-neutral configuration for the process-wide AnimForge logger.
@@ -60,11 +52,7 @@ namespace detail {
 /**
  * Backend boundary. Application code must use the AGA_LOG_* macros instead.
  */
-void write(Level level,
-           std::string_view message,
-           const char* file,
-           int line,
-           const char* function);
+void write(Level level, std::string_view message, const char* file, int line, const char* function);
 
 } // namespace detail
 
@@ -75,30 +63,22 @@ void write(Level level,
  * no spdlog type or header is exposed to AnimForge source files.
  */
 template <typename... Args>
-void log(Level level,
-         const char* file,
-         int line,
-         const char* function,
-         fmt::format_string<Args...> format,
-         Args&&... args) {
-    detail::write(level,
-                  fmt::format(format, std::forward<Args>(args)...),
-                  file,
-                  line,
-                  function);
+void log(Level level, const char* file, int line, const char* function,
+         fmt::format_string<Args...> format, Args&&... args) {
+    detail::write(level, fmt::format(format, std::forward<Args>(args)...), file, line, function);
 }
 
 } // namespace aga::log
 
-#define AGA_LOG_TRACE(...) \
+#define AGA_LOG_TRACE(...)                                                                         \
     ::aga::log::log(::aga::log::Level::trace, __FILE__, __LINE__, __func__, __VA_ARGS__)
-#define AGA_LOG_DEBUG(...) \
+#define AGA_LOG_DEBUG(...)                                                                         \
     ::aga::log::log(::aga::log::Level::debug, __FILE__, __LINE__, __func__, __VA_ARGS__)
-#define AGA_LOG_INFO(...) \
+#define AGA_LOG_INFO(...)                                                                          \
     ::aga::log::log(::aga::log::Level::info, __FILE__, __LINE__, __func__, __VA_ARGS__)
-#define AGA_LOG_WARN(...) \
+#define AGA_LOG_WARN(...)                                                                          \
     ::aga::log::log(::aga::log::Level::warn, __FILE__, __LINE__, __func__, __VA_ARGS__)
-#define AGA_LOG_ERROR(...) \
+#define AGA_LOG_ERROR(...)                                                                         \
     ::aga::log::log(::aga::log::Level::error, __FILE__, __LINE__, __func__, __VA_ARGS__)
-#define AGA_LOG_CRITICAL(...) \
+#define AGA_LOG_CRITICAL(...)                                                                      \
     ::aga::log::log(::aga::log::Level::critical, __FILE__, __LINE__, __func__, __VA_ARGS__)

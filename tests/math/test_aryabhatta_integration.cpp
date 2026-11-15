@@ -27,8 +27,7 @@ TEST_CASE("Aryabhatta transform composes translation rotation and scale",
     transform.rotation = math::angle_axis(1.57079632679f, math::UNIT_Y);
     transform.scale = math::Vec3{2.0f};
 
-    const math::Vec4 world =
-        transform.to_mat4() * math::Vec4{1.0f, 0.0f, 0.0f, 1.0f};
+    const math::Vec4 world = transform.to_mat4() * math::Vec4{1.0f, 0.0f, 0.0f, 1.0f};
 
     REQUIRE(world.x == Approx(10.0f).margin(0.001f));
     REQUIRE(world.y == Approx(20.0f).margin(0.001f));
@@ -46,8 +45,8 @@ TEST_CASE("Aryabhatta provides double precision math types", "[math][aryabhatta]
 }
 
 TEST_CASE("Aryabhatta interpolation is available directly", "[math][aryabhatta][interpolation]") {
-    const math::Vec3 midpoint = math::lerp(
-        math::Vec3{0.0f, 2.0f, 4.0f}, math::Vec3{10.0f, 12.0f, 14.0f}, 0.5f);
+    const math::Vec3 midpoint =
+        math::lerp(math::Vec3{0.0f, 2.0f, 4.0f}, math::Vec3{10.0f, 12.0f, 14.0f}, 0.5f);
     REQUIRE(midpoint.x == Approx(5.0f));
     REQUIRE(midpoint.y == Approx(7.0f));
     REQUIRE(midpoint.z == Approx(9.0f));
