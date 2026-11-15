@@ -33,11 +33,11 @@
 
 ## Core Modules
 
-### 1. `aga::math`
-- Vec3, Quat, Mat4, Transform (TRS).
-- Interpolation helpers (lerp, slerp, cubic, Hermite).
-- Coordinate system utilities.
-- Strictly header-only where possible; no external math library dependency in the hot path (GLM optional for samples).
+### 1. `Aryabhatta::Math` (public dependency)
+- Public math API is provided by the pinned `Aryabhatta` package, exposed as `aryabhatta::math`.
+- Float and double vector, matrix, quaternion, transform aliases and composition helpers are available directly.
+- Interpolation helpers include `lerp` and `slerp` with the library’s canonical conventions.
+- Projection choice remains explicit at the call site instead of relying on a shared global GLM depth macro.
 
 ### 2. `aga::animation`
 - `Skeleton` – joint hierarchy + inverse bind poses.

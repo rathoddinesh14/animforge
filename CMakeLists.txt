@@ -40,13 +40,12 @@ target_include_directories(aga_core
 )
 target_link_libraries(aga_core
     PUBLIC
-        glm::glm
+        Aryabhatta::Math
         fmt::fmt
         spdlog::spdlog
 )
 
 target_sources(aga_core PRIVATE
-    src/math/math_dummy.cpp
     src/core/logging.cpp
 )
 

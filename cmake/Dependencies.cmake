@@ -4,23 +4,23 @@
 include(FetchContent)
 
 # ---------------------------------------------------------------------------
-# GLM
+# Aryabhatta (shared public math API for the project)
 # ---------------------------------------------------------------------------
-find_package(glm CONFIG QUIET)
-if(NOT glm_FOUND)
-    message(STATUS "glm not found via find_package - fetching with FetchContent")
+find_package(Aryabhatta CONFIG QUIET)
+if(NOT Aryabhatta_FOUND)
+    message(STATUS "Aryabhatta not found via find_package - fetching the pinned contract")
     FetchContent_Declare(
-        glm
-        GIT_REPOSITORY https://github.com/g-truc/glm.git
-        GIT_TAG        1.0.1
-        GIT_SHALLOW    TRUE
+        aryabhatta
+        GIT_REPOSITORY https://github.com/rathoddinesh14/Aryabhatta.git
+        GIT_TAG        04408d3f001c037364f98807a2dca097b693c012
+        GIT_SHALLOW    FALSE
     )
-    set(GLM_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-    set(GLM_BUILD_INSTALL OFF CACHE BOOL "" FORCE)
-    FetchContent_MakeAvailable(glm)
-    if(NOT TARGET glm::glm)
-        add_library(glm::glm ALIAS glm)
-    endif()
+    set(ARYABHATTA_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(aryabhatta)
+endif()
+
+if(NOT TARGET Aryabhatta::Math)
+    message(FATAL_ERROR "Aryabhatta::Math target is unavailable")
 endif()
 
 # ---------------------------------------------------------------------------

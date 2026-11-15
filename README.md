@@ -18,9 +18,14 @@ A learning- and production-oriented codebase focused on deep understanding and i
 
 - Requirements, architecture, design decisions, backlog, and API outline documented.
 - CMake build setup for Windows and Linux.
+- Public math API migrated to the pinned Aryabhatta dependency.
 - Directory structure and coding standards established.
 
 Next: Phase 1 – Single skeleton + Linear Blend Skinning (CPU → GPU).
+
+## Math backend
+
+AnimForge uses the pinned `Aryabhatta::Math` library as its shared public math API. The project consumes `aryabhatta::math` directly and avoids maintaining a local `aga::math` wrapper layer.
 
 ## Quick Start
 
@@ -36,8 +41,13 @@ sudo apt-get install -y build-essential cmake ninja-build pkg-config \
 git clone https://github.com/rathoddinesh14/animforge.git
 cd animforge
 
-cmake --preset linux-ninja
-cmake --build --preset linux-ninja
+cmake -S . -B build-aryabhatta \
+  -DAGA_BUILD_SAMPLES=OFF \
+  -DAGA_BUILD_TESTS=ON \
+  -DAGA_USE_OPENGL=OFF \
+  -DAGA_USE_VULKAN=OFF
+cmake --build build-aryabhatta --parallel
+ctest --test-dir build-aryabhatta --output-on-failure
 ```
 
 ### Windows
@@ -48,8 +58,8 @@ git clone https://github.com/rathoddinesh14/animforge.git
 cd animforge
 
 # Configure & build (example with Visual Studio generator)
-cmake --preset windows-msvc
-cmake --build --preset windows-msvc-debug
+cmake -S . -B build-windows -DAGA_BUILD_SAMPLES=ON -DAGA_BUILD_TESTS=ON
+cmake --build build-windows --config Debug
 ```
 
 ## C++ Formatting
@@ -71,7 +81,7 @@ printf '%s\n' "$files" | xargs clang-format-17 -i
 
 | Document | Purpose |
 |----------|---------|
-+| [docs/LOGGING.md](docs/LOGGING.md) | Logging API, configuration, and backend replacement boundary |
+| [docs/LOGGING.md](docs/LOGGING.md) | Logging API, configuration, and backend replacement boundary |
 | [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) | Functional & non-functional requirements |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | High-level system architecture |
 | [docs/DESIGN_DECISIONS.md](docs/DESIGN_DECISIONS.md) | Key technical choices and rationale |

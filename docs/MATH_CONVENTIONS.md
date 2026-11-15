@@ -3,9 +3,9 @@
 These conventions are mandatory across the entire codebase. Any deviation must be documented and justified.
 
 ## Primary Library
-**GLM** (configured via `include/aga/math/math.hpp`).
+**Aryabhatta::Math** (public API namespace `aryabhatta::math`).
 
-All code must include `<aga/math/math.hpp>` rather than raw GLM headers so that the project-wide configuration is applied.
+AnimForge consumes the shared Aryabhatta math library directly instead of wrapping it in a local `aga::math` header. Keep direct GLM usage only for concrete APIs not exposed by Aryabhatta.
 
 ## Coordinate System
 - **Right-handed**
@@ -20,7 +20,7 @@ All code must include `<aga/math/math.hpp>` rather than raw GLM headers so that 
 ## Quaternion
 - GLM storage order: `(w, x, y, z)` with `w` as the real part.
 - Identity: `quat(1, 0, 0, 0)`
-- We expose `aga::math::IDENTITY_QUAT` for clarity.
+- We rely on Aryabhatta’s identity quaternion and transform helpers for clarity and consistency.
 
 ## Transform
 - Stored as separate Translation (`Vec3`) + Rotation (`Quat`) + Scale (`Vec3`).
@@ -42,8 +42,11 @@ skinned = Σ (w_i * skin_i * vertex)
 | OpenGL  | Up (+Y)         | [-1, 1]     |
 | Vulkan  | Down (–Y)       | [0, 1]      |
 
-We enable `GLM_FORCE_DEPTH_ZERO_TO_ONE` so that GLM’s perspective helpers produce Vulkan-style depth.  
-When targeting pure OpenGL we will adjust the projection matrix (or use a reverse-Z variant).
+Projection construction must explicitly choose the clip-space convention for the active backend:
+- OpenGL: `[-1, 1]` depth range with a camera-space convention matching OpenGL NDC.
+- Vulkan: `[0, 1]` depth range with the Vulkan projection layout.
+
+Do not assume a single global GLM depth macro is active across the project; backend-specific projection setup is explicit and reviewed per call site.
 
 ## Units
 - Time in seconds.

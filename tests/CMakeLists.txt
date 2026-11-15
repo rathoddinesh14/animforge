@@ -1,8 +1,7 @@
 # AnimForge unit tests (Catch2 v3)
 
 add_executable(aga_tests
-    math/test_glm_integration.cpp
-    math/test_math_helpers.cpp
+    math/test_aryabhatta_integration.cpp
     samples/test_geometry.cpp
     core/test_logging.cpp
 )
@@ -15,7 +14,6 @@ target_link_libraries(aga_tests
     PRIVATE
         aga_core
         Catch2::Catch2WithMain
-        glm::glm
 )
 
 if(AGA_USE_OPENGL)
