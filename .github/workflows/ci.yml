@@ -118,8 +118,35 @@ jobs:
 
       - name: Run clang-tidy
         run: |
-          clang-tidy-17 -p build-tidy \
-            tests/math/test_glm_integration.cpp \
-            tests/rhi/test_rhi_types.cpp \
-            src/math/math_dummy.cpp \
-            --quiet
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          import subprocess
+          import sys
+
+          database = Path("build-tidy/compile_commands.json")
+
+          with database.open() as f:
+              commands = json.load(f)
+
+          files = sorted({
+              str(Path(entry["file"]).resolve())
+              for entry in commands
+              if entry["file"].endswith((".cpp", ".cc", ".cxx"))
+          })
+
+          if not files:
+              print("No translation units found in compilation database.")
+              sys.exit(1)
+
+          print(f"Running clang-tidy on {len(files)} translation units")
+
+          result = subprocess.run([
+              "clang-tidy-17",
+              "-p", "build-tidy",
+              "--quiet",
+              *files
+          ])
+
+          sys.exit(result.returncode)
+          PY
