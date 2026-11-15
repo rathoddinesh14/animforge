@@ -71,6 +71,28 @@ if(AGA_USE_VULKAN AND AGA_BUILD_SAMPLES)
 endif()
 
 # ---------------------------------------------------------------------------
+# fmt (public formatting API)
+# ---------------------------------------------------------------------------
+find_package(fmt CONFIG QUIET)
+
+if(NOT fmt_FOUND)
+    message(STATUS "fmt not found via find_package - fetching with FetchContent")
+
+    FetchContent_Declare(
+        fmt
+        GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+        GIT_TAG        11.1.4
+        GIT_SHALLOW    TRUE
+    )
+
+    set(FMT_TEST OFF CACHE BOOL "" FORCE)
+    set(FMT_DOC OFF CACHE BOOL "" FORCE)
+    set(FMT_INSTALL OFF CACHE BOOL "" FORCE)
+
+    FetchContent_MakeAvailable(fmt)
+endif()
+
+# ---------------------------------------------------------------------------
 # spdlog (core logging backend)
 # ---------------------------------------------------------------------------
 find_package(spdlog CONFIG QUIET)
