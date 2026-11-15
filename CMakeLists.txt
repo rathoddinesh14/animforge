@@ -40,11 +40,13 @@ target_include_directories(aga_core
 )
 target_link_libraries(aga_core
     PUBLIC
-        glm::glm
+        Aryabhatta::Math
+        fmt::fmt
+        spdlog::spdlog
 )
 
 target_sources(aga_core PRIVATE
-    src/math/math_dummy.cpp
+    src/core/logging.cpp
 )
 
 # Vulkan samples use GLFW directly. OpenGL infrastructure is provided by
@@ -56,7 +58,7 @@ if(AGA_USE_OPENGL AND (AGA_BUILD_SAMPLES OR AGA_BUILD_TESTS))
     FetchContent_Declare(
         vishwakarma
         GIT_REPOSITORY https://github.com/rathoddinesh14/vishwakarma.git
-        GIT_TAG        2b5f2f8a156f669552a60973ea9ab1a15c47ff97
+        GIT_TAG        138ead3f01ad3c8da95a3d02fe380357440e4606
         GIT_SHALLOW    FALSE
     )
     FetchContent_MakeAvailable(vishwakarma)
@@ -84,12 +86,10 @@ if(AGA_ENABLE_COVERAGE)
     add_custom_target(aga_coverage_report
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/.coverage
         COMMAND ${LCOV_EXECUTABLE} --capture
-            --demangle-cpp
             --initial
             --directory ${CMAKE_BINARY_DIR}/CMakeFiles/aga_core.dir
             --output-file ${AGA_COVERAGE_BASE_FILE}
         COMMAND ${LCOV_EXECUTABLE} --capture
-            --demangle-cpp
             --ignore-errors source
             --directory ${CMAKE_BINARY_DIR}/CMakeFiles/aga_core.dir
             --directory ${CMAKE_BINARY_DIR}/tests/CMakeFiles/aga_tests.dir

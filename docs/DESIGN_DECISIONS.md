@@ -11,13 +11,12 @@ This document records the major technical choices and the reasoning behind them.
 **Rationale**: Industry standard, excellent Visual Studio integration, and dependencies can be resolved from system packages or fetched automatically. Avoids custom build scripts.
 
 ## 3. Math Library
-**Choice**: **GLM** as the primary mathematics library, configured and exposed through `aga::math`.  
+**Choice**: **Aryabhatta::Math** as the shared public mathematics library, consumed directly as `aryabhatta::math`.  
 **Rationale**:  
-- GLM is designed to match OpenGL/GLSL conventions (column-major, right-handed).  
-- Excellent consistency with both OpenGL and Vulkan (Vulkan only requires a Y-flip + [0,1] depth in the projection matrix).  
-- Mature, widely understood, and header-only.  
-- We force the exact configuration we need via compile definitions and a thin `aga/math/math.hpp` header so that every translation unit sees the same conventions.  
-- A pure custom math layer remains an option later if we need maximum control or smaller binary size; for now GLM gives the best productivity / correctness trade-off while we master animation techniques.
+- Aryabhatta provides the project’s common float/double vector, matrix, quaternion, and transform API without a custom in-tree wrapper.  
+- The project keeps backend-specific projection decisions explicit at the call site instead of relying on a single global GLM macro configuration.  
+- This reduces drift between sibling C++ projects while leaving AnimForge free to select OpenGL or Vulkan clip-space conventions intentionally.  
+- A custom local math layer remains an option later if we need more project-specific semantics, but the default shared contract is now Aryabhatta.
 
 ## 4. Asset Format
 **Choice**: glTF 2.0 as primary runtime format. Assimp as optional importer for authoring formats.  
@@ -75,6 +74,20 @@ sample code in AnimForge until Vulkan support is independently designed.
 - The graphics foundation evolves and is validated in its own repository.
 - AnimForge retains only domain-specific animation/rendering and its
   Vulkan-specific sample implementation.
+
+## 12. Logging
+**Choice**: Use spdlog as the current backend behind a small AnimForge-owned
+logging API (`aga::log` and `AGA_LOG_*`).
+
+**Rationale**:
+- Application and domain source files must not include spdlog headers or use
+  spdlog types.
+- The backend implementation is isolated in `src/core/logging.cpp`.
+- The public API exposes project-owned severity and configuration types only.
+- `fmt` supplies compile-time checked formatting at the API boundary; it is
+  independent of the selected logging backend.
+- A future backend replacement should change the adapter implementation and
+  dependency configuration, not logging call sites.
 
 **First milestone**: Consume a pinned Vishwakarma revision from OpenGL samples
 and test the public integration.

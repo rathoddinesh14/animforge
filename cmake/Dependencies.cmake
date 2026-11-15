@@ -4,23 +4,23 @@
 include(FetchContent)
 
 # ---------------------------------------------------------------------------
-# GLM
+# Aryabhatta (shared public math API for the project)
 # ---------------------------------------------------------------------------
-find_package(glm CONFIG QUIET)
-if(NOT glm_FOUND)
-    message(STATUS "glm not found via find_package - fetching with FetchContent")
+find_package(Aryabhatta CONFIG QUIET)
+if(NOT Aryabhatta_FOUND)
+    message(STATUS "Aryabhatta not found via find_package - fetching the pinned contract")
     FetchContent_Declare(
-        glm
-        GIT_REPOSITORY https://github.com/g-truc/glm.git
-        GIT_TAG        1.0.1
-        GIT_SHALLOW    TRUE
+        aryabhatta
+        GIT_REPOSITORY https://github.com/rathoddinesh14/Aryabhatta.git
+        GIT_TAG        04408d3f001c037364f98807a2dca097b693c012
+        GIT_SHALLOW    FALSE
     )
-    set(GLM_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-    set(GLM_BUILD_INSTALL OFF CACHE BOOL "" FORCE)
-    FetchContent_MakeAvailable(glm)
-    if(NOT TARGET glm::glm)
-        add_library(glm::glm ALIAS glm)
-    endif()
+    set(ARYABHATTA_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(aryabhatta)
+endif()
+
+if(NOT TARGET Aryabhatta::Math)
+    message(FATAL_ERROR "Aryabhatta::Math target is unavailable")
 endif()
 
 # ---------------------------------------------------------------------------
@@ -69,3 +69,45 @@ if(AGA_USE_VULKAN AND AGA_BUILD_SAMPLES)
     endif()
 
 endif()
+
+# ---------------------------------------------------------------------------
+# fmt (public formatting API)
+# ---------------------------------------------------------------------------
+find_package(fmt CONFIG QUIET)
+
+if(NOT fmt_FOUND)
+    message(STATUS "fmt not found via find_package - fetching with FetchContent")
+
+    FetchContent_Declare(
+        fmt
+        GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+        GIT_TAG        11.1.4
+        GIT_SHALLOW    TRUE
+    )
+
+    set(FMT_TEST OFF CACHE BOOL "" FORCE)
+    set(FMT_DOC OFF CACHE BOOL "" FORCE)
+    set(FMT_INSTALL OFF CACHE BOOL "" FORCE)
+
+    FetchContent_MakeAvailable(fmt)
+endif()
+
+# ---------------------------------------------------------------------------
+# spdlog (core logging backend)
+# ---------------------------------------------------------------------------
+find_package(spdlog CONFIG QUIET)
+if(NOT spdlog_FOUND)
+    message(STATUS "spdlog not found via find_package - fetching with FetchContent")
+    FetchContent_Declare(
+        spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog.git
+        GIT_TAG        v1.15.3
+        GIT_SHALLOW    TRUE
+    )
+    set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(SPDLOG_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+    set(SPDLOG_BUILD_BENCH OFF CACHE BOOL "" FORCE)
+    set(SPDLOG_INSTALL OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(spdlog)
+endif()
+

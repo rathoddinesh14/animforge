@@ -21,7 +21,7 @@ real-time animation systems.
 | Member variables | `m_` prefix | `m_joints`, `m_duration` |
 | Local variables | `camelCase` | `localTransform`, `boneIndex` |
 | Constants / enum enumerators | `kCamelCase` or `PascalCase` | `kMaxInfluences`, `LoopMode::Once` |
-| Namespaces | `aga` (and focused sub-namespaces) | `aga::math`, `aga::animation` |
+| Namespaces | `aga` (and focused sub-namespaces) | `aryabhatta::math`, `aga::animation` |
 | Files | Match primary type; snake_case for tests | `Skeleton.hpp`, `test_pose.cpp` |
 | Macros | `AGA_UPPER_SNAKE` | `AGA_ASSERT` |
 
@@ -37,7 +37,7 @@ real-time animation systems.
 - Use `#pragma once`.
 - Include order (enforced by clang-format IncludeCategories):
   1. Related / project headers (`aga/...`)
-  2. Third-party (`glm/...`, `catch2/...`)
+  2. Third-party (`aryabhatta/...`, `catch2/...`)
   3. Standard library (`<vector>`, `<span>`, …)
 - Prefer forward declarations in headers when sufficient.
 - Do not put heavy implementation details in public headers unless required for templates/inline.
@@ -63,7 +63,7 @@ Document:
 ```cpp
 #pragma once
 
-#include <aga/math/math.hpp>
+#include <aryabhatta/math/math.hpp>
 #include <span>
 #include <string>
 #include <vector>

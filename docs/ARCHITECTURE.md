@@ -33,11 +33,11 @@
 
 ## Core Modules
 
-### 1. `aga::math`
-- Vec3, Quat, Mat4, Transform (TRS).
-- Interpolation helpers (lerp, slerp, cubic, Hermite).
-- Coordinate system utilities.
-- Strictly header-only where possible; no external math library dependency in the hot path (GLM optional for samples).
+### 1. `Aryabhatta::Math` (public dependency)
+- Public math API is provided by the pinned `Aryabhatta` package, exposed as `aryabhatta::math`.
+- Float and double vector, matrix, quaternion, transform aliases and composition helpers are available directly.
+- Interpolation helpers include `lerp` and `slerp` with the library’s canonical conventions.
+- Projection choice remains explicit at the call site instead of relying on a shared global GLM depth macro.
 
 ### 2. `aga::animation`
 - `Skeleton` – joint hierarchy + inverse bind poses.
@@ -68,7 +68,16 @@
   without duplicating Vishwakarma's platform or OpenGL infrastructure.
 
 ### 5. `aga::core`
-- Logging, assertions, memory arenas (optional), timing.
+- Logging API, assertion policy, memory arenas (optional), timing.
+
+#### Logging
+
+- Application code uses the backend-neutral `<aga/core/logging.hpp>` API and
+  `AGA_LOG_*` macros.
+- `src/core/logging.cpp` is the only AnimForge translation unit that depends
+  on spdlog.
+- The current backend is spdlog; replacing it must not require changes to
+  animation, math, sample, or rendering call sites.
 
 ## Data Flow (Typical Frame)
 

@@ -1,24 +1,20 @@
 # Public API Overview (Initial Draft)
 
-Namespace: `aga`
+Namespace: `aryabhatta::math`
 
 ## Math
 
 ```cpp
-namespace aga::math {
-    struct Vec3 { float x, y, z; };
-    struct Quat { float x, y, z, w; };
-    struct Mat4 { float m[16]; };          // column-major
-    struct Transform {
-        Vec3 translation;
-        Quat rotation;
-        Vec3 scale;
-    };
+namespace aryabhatta::math {
+    using Vec3 = BasicVec3<float>;
+    using Quat = BasicQuat<float>;
+    using Mat4 = BasicMat4<float>;
+    using Transform = BasicTransform<float>;
 
-    Transform lerp(const Transform& a, const Transform& b, float t);
-    Transform slerp(const Transform& a, const Transform& b, float t); // rotation via slerp
+    Vec3 lerp(const Vec3& a, const Vec3& b, float t);
+    Quat slerp(const Quat& a, const Quat& b, float t);
     Mat4 to_mat4(const Transform& t);
-    // ... hierarchical multiply, inverse, etc.
+    // ... public aliases and helpers exposed by the imported dependency.
 }
 ```
 
