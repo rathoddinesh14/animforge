@@ -71,6 +71,7 @@ printf '%s\n' "$files" | xargs clang-format-17 -i
 
 | Document | Purpose |
 |----------|---------|
++| [docs/LOGGING.md](docs/LOGGING.md) | Logging API, configuration, and backend replacement boundary |
 | [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) | Functional & non-functional requirements |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | High-level system architecture |
 | [docs/DESIGN_DECISIONS.md](docs/DESIGN_DECISIONS.md) | Key technical choices and rationale |

@@ -76,6 +76,20 @@ sample code in AnimForge until Vulkan support is independently designed.
 - AnimForge retains only domain-specific animation/rendering and its
   Vulkan-specific sample implementation.
 
+## 12. Logging
+**Choice**: Use spdlog as the current backend behind a small AnimForge-owned
+logging API (`aga::log` and `AGA_LOG_*`).
+
+**Rationale**:
+- Application and domain source files must not include spdlog headers or use
+  spdlog types.
+- The backend implementation is isolated in `src/core/logging.cpp`.
+- The public API exposes project-owned severity and configuration types only.
+- `fmt` supplies compile-time checked formatting at the API boundary; it is
+  independent of the selected logging backend.
+- A future backend replacement should change the adapter implementation and
+  dependency configuration, not logging call sites.
+
 **First milestone**: Consume a pinned Vishwakarma revision from OpenGL samples
 and test the public integration.
 **Not first**: Duplicate a second renderer or migrate Vulkan as part of this

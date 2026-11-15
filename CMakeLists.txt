@@ -41,10 +41,12 @@ target_include_directories(aga_core
 target_link_libraries(aga_core
     PUBLIC
         glm::glm
+        spdlog::spdlog
 )
 
 target_sources(aga_core PRIVATE
     src/math/math_dummy.cpp
+    src/core/logging.cpp
 )
 
 # Vulkan samples use GLFW directly. OpenGL infrastructure is provided by

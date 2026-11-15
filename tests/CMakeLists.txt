@@ -4,6 +4,7 @@ add_executable(aga_tests
     math/test_glm_integration.cpp
     math/test_math_helpers.cpp
     samples/test_geometry.cpp
+    core/test_logging.cpp
 )
 
 if(AGA_USE_OPENGL)

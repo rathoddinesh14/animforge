@@ -8,7 +8,8 @@ Use GitHub Issues with labels: `phase-0`, `phase-1`, `phase-2`, … and `math`, 
 - [x] CMake build setup supports Windows and Linux
 - [x] GitHub Actions CI (Windows build/test + format + clang-tidy)
 - [x] Coding standards, naming conventions, clang-format, clang-tidy
-- [ ] Basic logging & assertion macros
+- [x] Backend-neutral logging API with spdlog implementation
+- [ ] Assertion policy / project assertion macros
 - [x] GLM integrated as primary math library via aga::math
 - [x] Catch2 tests for GLM integration and conventions
 - [x] MATH_CONVENTIONS.md finalized and enforced

@@ -68,7 +68,16 @@
   without duplicating Vishwakarma's platform or OpenGL infrastructure.
 
 ### 5. `aga::core`
-- Logging, assertions, memory arenas (optional), timing.
+- Logging API, assertion policy, memory arenas (optional), timing.
+
+#### Logging
+
+- Application code uses the backend-neutral `<aga/core/logging.hpp>` API and
+  `AGA_LOG_*` macros.
+- `src/core/logging.cpp` is the only AnimForge translation unit that depends
+  on spdlog.
+- The current backend is spdlog; replacing it must not require changes to
+  animation, math, sample, or rendering call sites.
 
 ## Data Flow (Typical Frame)
 
